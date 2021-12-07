@@ -1,6 +1,6 @@
 ## API routes
 
-| Route                        | GET                                | GET      | POST requirements             |
+| Route                        | GET                                | GET type | POST requirements             |
 | ---------------------------- | ---------------------------------- | -------- | ----------------------------- |
 | /                            | redirects depending on user cookie | redirect | --                            |
 | /login                       | JSP: user login                    | JSP      | email, pw                     |
