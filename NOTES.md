@@ -10,8 +10,8 @@
 | /profile/{profileID}/edit      | React: edit user profile           | React only                                                                                      | profileInfo                   |
 | /profile/{profileID}/follows   | React: profiles followed by user   | jSON {users:[(see user_info above)]}                                                            | removedProfileIDsList         |
 | /profile/search                | React: search user profiles        | jSON {users:[(see user_info above)]}                                                            | searchString                  |
-| /post/{postID}                 | React: image post                  | jSON {pic_url:(string), stamps:[(see stamp below)]}                                             | --                            |
+| /post/{postID}                 | React: image post                  | jSON {id:(int or string),pic_url:(string), stamps:[(see stamp below)]}                          | --                            |
 | /post/new                      | React: add post                    | React only                                                                                      | imageFile,description         |
-| /post/{postID}/stamp/{stampID} | --                                 | jSON {stamp_url:(string),x:(int),y(int)}                                                        | --                            |
+| /post/{postID}/stamp/{stampID} | --                                 | jSON {id:(int or string),stamp_url:(string),x:(int),y(int)}                                     | --                            |
 | /post/{postID}/stamp/new       | React: add a stamp to post         | jSON                                                                                            | stampID,x,y                   |
 | (tbd)                          | image path                         | --                                                                                              | --                            |
