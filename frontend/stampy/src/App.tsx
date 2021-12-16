@@ -7,8 +7,12 @@ import UserProfile from "./components/user_profile";
 function App() {
     return (
         <Router>
+            <nav>
+                <Link to="/placeholder">placeholder</Link>
+                <Link to="/profile">profile</Link>
+            </nav>
             <Routes>
-                <Route path="/" element={<Placeholder />}></Route>
+                <Route path="/placeholder" element={<Placeholder />}></Route>
                 <Route path="/profile" element={<UserProfile />}></Route>
             </Routes>
         </Router>
