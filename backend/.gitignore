@@ -23,9 +23,9 @@
 hs_err_pid*
 /.metadata/
 
-static/js/*
-static/css/*
-static/media/*
+static/js/
+static/css/
+static/media/
 static/*.png
 static/*manifest.json
 static/robots.txt
