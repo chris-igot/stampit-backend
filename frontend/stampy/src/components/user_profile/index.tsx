@@ -21,7 +21,7 @@ function UserProfile() {
                 name: id ? "person's name" : "no one",
                 text: id ? "profile info" : "",
                 pic_url: id
-                    ? "https://picsum.photos/100?random=1000"
+                    ? "/files/Example.PNG"
                     : "https://picsum.photos/id/870/100/100?grayscale&blur=2",
             },
             posts,
@@ -37,7 +37,7 @@ function UserProfile() {
                     <img
                         src={profile.user_info.pic_url}
                         alt="thumbnail"
-                        className=""
+                        className="w-11"
                     />
                     <span>{profile.user_info.name}</span>
                 </div>
@@ -46,9 +46,15 @@ function UserProfile() {
                 </div>
             </div>
             <div className="flex flex-wrap">
-                {(profile as ProfileType).posts.map((post) => (
-                    <a href={"/post/" + post.id}>
-                        <img src={post.pic_url} alt="thumbnail" className="" />
+                {(profile as ProfileType).posts.map((post, index) => (
+                    <a key={index} href={"/post/" + post.id}>
+                        <div className="h-36 w-36">
+                            <img
+                                src={post.pic_url}
+                                alt="thumbnail"
+                                className=""
+                            />
+                        </div>
                     </a>
                     // <p>{url}</p>
                 ))}

@@ -10,6 +10,9 @@ function App() {
             <nav>
                 <Link to="/placeholder">placeholder</Link>
                 <Link to="/profile">profile</Link>
+                <Link to="/upload" reloadDocument>
+                    upload
+                </Link>
             </nav>
             <Routes>
                 <Route path="/placeholder" element={<Placeholder />}></Route>
