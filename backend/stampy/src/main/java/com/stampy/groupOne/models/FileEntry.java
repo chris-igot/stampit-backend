@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "files")
-public class File {
+public class FileEntry {
 	@Id
 	private String id;
 	private String path;
@@ -21,9 +21,9 @@ public class File {
 	private Date createdAt;
 	private Date updatedAt;
 	
-	public File() {}
+	public FileEntry() {}
 	
-	public File(String id, String fileName, String path, String type) {
+	public FileEntry(String id, String fileName, String path, String type) {
 		this.id = id;
 		this.fileName = fileName;
 		this.path = path;
