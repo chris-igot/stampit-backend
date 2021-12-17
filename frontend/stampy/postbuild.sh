@@ -1,6 +1,5 @@
 #!/bin/bash
-echo "this is some post build text"
-# sed "s/asdf/qwerty/" ./example.txt example2.txt
+
 awk '{sub("href=\"/","href=\"")}1' ./build/index.html > ./build/temp.html
 awk '{sub("href=\"/","href=\"")}1' ./build/temp.html > ./build/temp2.html
 awk '{sub("href=\"/","href=\"")}1' ./build/temp2.html > ./build/temp.html
