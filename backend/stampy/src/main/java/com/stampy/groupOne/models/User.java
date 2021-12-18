@@ -1,10 +1,13 @@
 package com.stampy.groupOne.models;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -13,21 +16,29 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 	@Size(min = 2, message = "Name must have at least 2 characters")
+	@JsonIgnore
 	private String name;
 	@Email(message = "Email must be valid")
 	@NotBlank
+	@JsonIgnore
 	private String email;
 	@Size(min = 8, message = "Password must at least be 8 characters!")
+	@JsonIgnore
 	private String password;
 	@Transient
 	private String passwordConfirm;
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Post> posts;
 
 	private Date createdAt;
 	private Date updatedAt;
@@ -81,5 +92,11 @@ public class User {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	public List<Post> getPosts() {
+		return posts;
+	}
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 }
