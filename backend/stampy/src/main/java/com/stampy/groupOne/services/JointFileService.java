@@ -49,6 +49,13 @@ public class JointFileService {
 		return null;
 	}
 	
+	public FileEntry addImage(MultipartFile uploadedFile) {
+		if(uploadedFile.getContentType().startsWith("image")) {
+			return this.add(uploadedFile);
+		}
+		return null;
+	}
+	
 	public FileEntry getEntryById(String id) {
 		return fileEntryRepo.findById(id).get();
 	}
