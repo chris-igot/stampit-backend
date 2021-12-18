@@ -3,22 +3,31 @@ package com.stampy.groupOne.models;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "files")
 public class FileEntry {
 	@Id
+	@JsonIgnore
 	private String id;
+	@JsonIgnore
 	private String path;
 	private String fileName;
+	@JsonIgnore
 	private String type;
+	@OneToOne(mappedBy = "image")
+	@JsonIgnore
+	private Post post;
+	@JsonIgnore
 	private Date createdAt;
+	@JsonIgnore
 	private Date updatedAt;
 	
 	public FileEntry() {}
@@ -73,6 +82,14 @@ public class FileEntry {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
 	
 }
