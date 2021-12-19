@@ -1,24 +1,24 @@
 export interface PostType {
     id: number | string;
-    pic_url: string;
+    image: string;
     stamps: StampType[];
 }
 
 export interface StampType {
     id: number | string;
-    stamp_url: string;
+    stamp: string;
     x: number;
     y: number;
 }
 
-export interface ProfileType {
-    user_info: UserInfoType;
+export interface UserType {
+    id: number | string;
+    profile: ProfileType;
     posts: PostType[];
 }
 
-export interface UserInfoType {
-    id: number | string;
+export interface ProfileType {
     name: string;
-    text: string;
-    pic_url: string;
+    description: string;
+    image: string;
 }
