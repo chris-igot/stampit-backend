@@ -1,16 +1,17 @@
 package com.stampy.groupOne.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.stampy.groupOne.services.UserService;
-
 @Controller
 public class ReactController {
+	/* REACT ROUTES	
+	 * All these routes should correspond to react-router-dom routes
+	 * Any route in react should be added here to prevent 404s from the server
+	 * This is here for server redirects
+	 * */
 	public static final String reactPage = "stampyReact.jsp"; 
-	@Autowired
-	UserService usrServ;
+
 	@GetMapping("/profile")
 	public String reactProfile() {
 		return reactPage;

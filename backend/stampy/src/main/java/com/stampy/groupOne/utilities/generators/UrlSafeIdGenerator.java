@@ -1,7 +1,6 @@
 package com.stampy.groupOne.utilities.generators;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.Table;
@@ -33,7 +32,6 @@ public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 		String dbId = session.getEntityPersister(object.getClass().getName(), object).getIdentifierPropertyName();
 		String dbTable = object.getClass().getAnnotation(Table.class).name();
 		String queryTemplate = "select "+dbId+" from "+dbTable+" where "+dbId+" = '%s'";
-//		String query = String.format("select %s from %s where;", dbId, dbTable);
 		
 		String newId = RandGenerator.urlSafe();
 		String query = String.format(queryTemplate, newId);

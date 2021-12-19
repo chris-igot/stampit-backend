@@ -29,9 +29,9 @@ public class Post {
     strategy = "com.stampy.groupOne.utilities.generators.UrlSafeIdGenerator")
 	private String id;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "profile_id")
 	@JsonIgnore
-	private User user;
+	private Profile profile;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id", referencedColumnName = "id")
 	@JsonSerialize(using = ImageSerializer.class)
@@ -42,7 +42,9 @@ public class Post {
 	
 	@PrePersist
 	protected void onCreate() {
-		this.createdAt = new Date();
+		Date date = new Date();
+		this.createdAt = date;
+		this.updatedAt = date;
 	}
 	@PreUpdate
 	protected void onUpdate() {
@@ -72,11 +74,11 @@ public class Post {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	public User getUser() {
-		return user;
+	public Profile getProfile() {
+		return profile;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 	
 }

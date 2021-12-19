@@ -19,17 +19,22 @@ public class PostController {
 	PostService postServ;
 	
 	@GetMapping("/api/post")
-	public Post getAPIPost(@RequestParam("post") String postId) {
-		return postServ.getById(postId);
+	public ResponseEntity<Post> getAPIPost(@RequestParam("post") String postId) {
+		Post post = postServ.getById(postId);
+		if(post != null) {
+			return ResponseEntity.ok().body(post);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	@PostMapping("/api/post/new")
-	public String getAPINewPost(@RequestParam("file") MultipartFile uploadedFile) {
+	public String postAPIPost(@RequestParam("file") MultipartFile uploadedFile) {
 		postServ.addImagePost(uploadedFile);
 		return "redirect:/profile";
 	}
 	@GetMapping("/api/public")
-	public ResponseEntity<List<Post>> getAPIPublicPosts() {
+	public ResponseEntity<List<Post>> getAPIPublic() {
 		List<Post> posts = postServ.getAll();
 		if(posts.size() > 0) {
 			return ResponseEntity.ok().body(posts);
