@@ -8,10 +8,26 @@ import com.stampy.groupOne.services.UserService;
 
 @Controller
 public class ReactController {
+	public static final String reactPage = "stampyReact.jsp"; 
 	@Autowired
 	UserService usrServ;
 	@GetMapping("/profile")
-	public String r() {
-		return "stampyReact.jsp";
+	public String reactProfile() {
+		return reactPage;
+	}
+	
+	@GetMapping("/public")
+	public String reactPublic() {
+		return reactPage;
+	}
+	
+	@GetMapping("/post")
+	public String reactPost() {
+		return reactPage;
+	}
+	
+	@GetMapping("/post/new")
+	public String reactPostNew() {
+		return reactPage;
 	}
 }

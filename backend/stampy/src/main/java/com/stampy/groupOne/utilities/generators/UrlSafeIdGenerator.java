@@ -1,8 +1,8 @@
 package com.stampy.groupOne.utilities.generators;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 import javax.persistence.Table;
 
@@ -32,30 +32,25 @@ public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 	public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
 		String dbId = session.getEntityPersister(object.getClass().getName(), object).getIdentifierPropertyName();
 		String dbTable = object.getClass().getAnnotation(Table.class).name();
-		String queryTemplate = "select "+dbId+" from "+dbTable+" where "+dbId+" = \"%s\";";
+		String queryTemplate = "select "+dbId+" from "+dbTable+" where "+dbId+" = '%s'";
 //		String query = String.format("select %s from %s where;", dbId, dbTable);
 		
 		String newId = RandGenerator.urlSafe();
 		String query = String.format(queryTemplate, newId);
-        Integer resultSize = jdbcTemplate.queryForList(query).size();
+		Integer resultSize = session.createSQLQuery(query).list().size();
 
-        System.out.println("New ID");
-        System.out.println(resultSize);
-        newId = "newidcopy";
         for (int i = 0; i < 3; i++) {
         	if(resultSize > 0) {
-        		System.out.println("BAD ID");
         		newId = RandGenerator.urlSafe();
         		query = String.format(queryTemplate, newId);
-        		resultSize = jdbcTemplate.queryForList(query).size();
+        		resultSize = session.createSQLQuery(query).list().size();
         	} else {
         		System.out.println(newId);
         		return newId;
         	}
 			
 		}
-
-        return newId;
+        return null;
 	}
 
 }

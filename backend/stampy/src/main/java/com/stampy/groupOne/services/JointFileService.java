@@ -25,6 +25,7 @@ public class JointFileService {
 	
 	public FileEntry add(MultipartFile uploadedFile, String usage) {
 		/* 
+		 * Id must be generated here to ensure it matches filename
 		 * The for loop detects id collisions. 3 attempts total 
 		 * */
 		String newFileId = RandGenerator.urlSafe();

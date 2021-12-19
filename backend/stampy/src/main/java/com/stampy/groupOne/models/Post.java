@@ -6,7 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,7 +14,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stampy.groupOne.utilities.serialization.ImageSerializer;
@@ -24,8 +24,10 @@ import com.stampy.groupOne.utilities.serialization.ImageSerializer;
 @Table(name = "posts")
 public class Post {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "id-generator")
+	@GenericGenerator(name = "id-generator",
+    strategy = "com.stampy.groupOne.utilities.generators.UrlSafeIdGenerator")
+	private String id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
@@ -46,10 +48,10 @@ public class Post {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public FileEntry getImage() {

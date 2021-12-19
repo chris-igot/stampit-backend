@@ -24,7 +24,7 @@ public class JSONTest {
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			Post post = new Post();
-			post.setId((long) i);
+			post.setId("post00"+ i);
 			FileEntry image = new FileEntry();
 			String id = "image00"+i;
 			image.setId(id);
