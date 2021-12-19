@@ -1,4 +1,4 @@
-package com.stampy.groupOne.utilities;
+package com.stampy.groupOne.utilities.random;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

@@ -3,11 +3,15 @@ package com.stampy.groupOne.models;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "files")
 public class FileEntry {
 	@Id
+	@GeneratedValue(generator = "prod-generator")
+	@GenericGenerator(name = "prod-generator",
+	    strategy = "com.stampy.groupOne.utilities.generators.UrlSafeIdGenerator")
 	@JsonIgnore
 	private String id;
 	@JsonIgnore
@@ -22,6 +29,8 @@ public class FileEntry {
 	private String fileName;
 	@JsonIgnore
 	private String type;
+	@JsonIgnore
+	private String category;
 	@OneToOne(mappedBy = "image")
 	@JsonIgnore
 	private Post post;
@@ -32,11 +41,19 @@ public class FileEntry {
 	
 	public FileEntry() {}
 	
-	public FileEntry(String id, String fileName, String path, String type) {
+	public FileEntry(String fileName, String path, String type, String usage) {
+		this.fileName = fileName;
+		this.path = path;
+		this.type = type;
+		this.category = usage;
+	}
+	
+	public FileEntry(String id, String fileName, String path, String type, String usage) {
 		this.id = id;
 		this.fileName = fileName;
 		this.path = path;
 		this.type = type;
+		this.category = usage;
 	}
 	
 	@PrePersist
@@ -90,6 +107,14 @@ public class FileEntry {
 
 	public void setPost(Post post) {
 		this.post = post;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 }

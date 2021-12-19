@@ -15,7 +15,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.stampy.groupOne.utilities.serialization.ImageSerializer;
 
 @Entity
 @Table(name = "posts")
@@ -25,11 +28,12 @@ public class Post {
 	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private User user;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id", referencedColumnName = "id")
+	@JsonSerialize(using = ImageSerializer.class)
 	private FileEntry image;
-	@JsonIgnore
 	private Date createdAt;
 	@JsonIgnore
 	private Date updatedAt;

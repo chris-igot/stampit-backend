@@ -26,7 +26,7 @@ public class User {
 	@JsonIgnore
 	private Long id;
 	@Size(min = 2, message = "Name must have at least 2 characters")
-	@JsonIgnore
+//	@JsonIgnore
 	private String name;
 	@Email(message = "Email must be valid")
 	@NotBlank
@@ -36,11 +36,14 @@ public class User {
 	@JsonIgnore
 	private String password;
 	@Transient
+	@JsonIgnore
 	private String passwordConfirm;
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Post> posts;
-
+	
+	@JsonIgnore
 	private Date createdAt;
+	@JsonIgnore
 	private Date updatedAt;
 	
 	@PrePersist

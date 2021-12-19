@@ -12,7 +12,7 @@ import com.stampy.groupOne.models.FileEntry;
 import com.stampy.groupOne.repositories.FileEntryRepository;
 import com.stampy.groupOne.storage.StorageProperties;
 import com.stampy.groupOne.storage.StorageService;
-import com.stampy.groupOne.utilities.RandGenerator;
+import com.stampy.groupOne.utilities.random.RandGenerator;
 
 @Service
 public class JointFileService {
@@ -23,7 +23,7 @@ public class JointFileService {
 	@Autowired
 	StorageService storageServ;
 	
-	public FileEntry add(MultipartFile uploadedFile) {
+	public FileEntry add(MultipartFile uploadedFile, String usage) {
 		/* 
 		 * The for loop detects id collisions. 3 attempts total 
 		 * */
@@ -43,15 +43,15 @@ public class JointFileService {
 				String fileName = newFileId+"."+extension;
 				
 				storageServ.store(uploadedFile, fileName);
-				return fileEntryRepo.save(new FileEntry(newFileId, fileName, storageProperties.getLocation(), uploadedFile.getContentType()));			
+				return fileEntryRepo.save(new FileEntry(newFileId, fileName, storageProperties.getLocation(), uploadedFile.getContentType(), usage));			
 			}
 		}
 		return null;
 	}
 	
-	public FileEntry addImage(MultipartFile uploadedFile) {
+	public FileEntry addImage(MultipartFile uploadedFile, String usage) {
 		if(uploadedFile.getContentType().startsWith("image")) {
-			return this.add(uploadedFile);
+			return this.add(uploadedFile, usage);
 		}
 		return null;
 	}
