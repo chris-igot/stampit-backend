@@ -1,56 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { ProfileType, PostType } from "../../ts_types/types";
+import { UserType, PostType } from "../../ts_types/types";
 
 function UserProfile() {
-    const [profile, setProfile] = useState<ProfileType>(getProfile());
+    const [user, setUser] = useState<UserType>(getProfile());
     useEffect(() => {
-        setProfile(getProfile(5));
+        setUser(getProfile(5));
     }, []);
     function getProfile(id?: number | string) {
         let posts: PostType[] = [];
         for (let i = 0; i < 12; i++) {
             posts.push({
                 id: i,
-                pic_url: "https://picsum.photos/100?random=" + i,
+                image: "https://picsum.photos/100?random=" + i,
                 stamps: [],
             });
         }
-        let profile: ProfileType = {
-            user_info: {
-                id: id ? id : "none",
+        let user: UserType = {
+            id: id ? id : "none",
+            profile: {
                 name: id ? "person's name" : "no one",
-                text: id ? "profile info" : "",
-                pic_url: id
+                description: id ? "profile info" : "",
+                image: id
                     ? "/files/Example.PNG"
                     : "https://picsum.photos/id/870/100/100?grayscale&blur=2",
             },
             posts,
         };
-        console.log(profile);
+        console.log(user);
 
-        return profile;
+        return user;
     }
     return (
         <div className="">
             <div>
                 <div className="flex flex-wrap">
                     <img
-                        src={profile.user_info.pic_url}
+                        src={user.profile.image}
                         alt="thumbnail"
                         className="w-11"
                     />
-                    <span>{profile.user_info.name}</span>
+                    <span>{user.profile.name}</span>
                 </div>
                 <div>
-                    <p>{profile.user_info.text}</p>
+                    <p>{user.profile.description}</p>
                 </div>
             </div>
             <div className="flex flex-wrap">
-                {(profile as ProfileType).posts.map((post, index) => (
+                {(user as UserType).posts.map((post, index) => (
                     <a key={index} href={"/post/" + post.id}>
                         <div className="h-36 w-36">
                             <img
-                                src={post.pic_url}
+                                src={post.image}
                                 alt="thumbnail"
                                 className=""
                             />
