@@ -33,10 +33,24 @@ public class Profile {
 	private String bio;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonIgnore
 	private User user;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
 	private List<Post> posts;
 	
+	public Profile() {}
+	public Profile(String title, String bio) {
+		this.title = title;
+		this.bio = bio;
+	}
+	public Profile(String name, String title, String bio, User user) {
+		this.name = name;
+		this.title = title;
+		this.bio = bio;
+		this.user = user;
+	}
+	
+	@JsonIgnore
 	private Date createdAt;
 	@JsonIgnore
 	private Date updatedAt;
@@ -92,6 +106,12 @@ public class Profile {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

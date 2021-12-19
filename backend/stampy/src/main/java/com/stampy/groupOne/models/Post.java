@@ -31,13 +31,13 @@ public class Post {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	@JsonIgnore
+	//Serialize this to profile_id
 	private Profile profile;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id", referencedColumnName = "id")
 	@JsonSerialize(using = ImageSerializer.class)
 	private FileEntry image;
 	private Date createdAt;
-	@JsonIgnore
 	private Date updatedAt;
 	
 	@PrePersist
