@@ -46,7 +46,7 @@ public class FileController {
 			RedirectAttributes redirectAttributes) {
 		System.out.println("UPLOAD - POST");
 
-		fileServ.addImage(uploadedFile);
+		fileServ.addImage(uploadedFile,"post");
 		
 		redirectAttributes.addFlashAttribute("message",
 				"You successfully uploaded " + uploadedFile.getOriginalFilename() + "!");
