@@ -11,7 +11,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,8 +18,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "files")
 public class FileEntry {
 	@Id
-	@GeneratedValue(generator = "prod-generator")
-	@GenericGenerator(name = "prod-generator",
+	@GeneratedValue(generator = "id-generator")
+	@GenericGenerator(name = "id-generator",
 	    strategy = "com.stampy.groupOne.utilities.generators.UrlSafeIdGenerator")
 	@JsonIgnore
 	private String id;
