@@ -96,4 +96,10 @@ public class User {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	public Profile getProfile() {
+		return profile;
+	}
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+	}
 }
