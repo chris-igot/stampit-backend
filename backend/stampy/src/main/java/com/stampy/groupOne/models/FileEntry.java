@@ -3,14 +3,11 @@ package com.stampy.groupOne.models;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,9 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "files")
 public class FileEntry {
 	@Id
-	@GeneratedValue(generator = "id-generator")
-	@GenericGenerator(name = "id-generator",
-	    strategy = "com.stampy.groupOne.utilities.generators.UrlSafeIdGenerator")
 	@JsonIgnore
 	private String id;
 	@JsonIgnore
