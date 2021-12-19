@@ -1,13 +1,11 @@
 package com.stampy.groupOne.models;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -38,8 +36,8 @@ public class User {
 	@Transient
 	@JsonIgnore
 	private String passwordConfirm;
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private List<Post> posts;
+	@OneToOne(mappedBy = "user")
+	private Profile profile;
 	
 	@JsonIgnore
 	private Date createdAt;
@@ -48,7 +46,9 @@ public class User {
 	
 	@PrePersist
 	protected void onCreate() {
-		this.createdAt = new Date();
+		Date date = new Date();
+		this.createdAt = date;
+		this.updatedAt = date;
 	}
 	@PreUpdate
 	protected void onUpdate() {
@@ -95,11 +95,5 @@ public class User {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-	public List<Post> getPosts() {
-		return posts;
-	}
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
 	}
 }

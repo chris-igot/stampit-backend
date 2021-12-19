@@ -5,22 +5,24 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stampy.groupOne.models.FileEntry;
 import com.stampy.groupOne.models.Post;
-import com.stampy.groupOne.models.User;
+import com.stampy.groupOne.models.Profile;
+import com.stampy.groupOne.services.PostService;
 
 @RestController
 public class JSONTest {
+	@Autowired
+	PostService postServ;
 	@GetMapping("/test")
-	public User apiTest(HttpSession session) {
-		User user = new User();
-		user.setEmail("a@a.com");
-		user.setId((long) 5);
-		user.setName("username");
-		user.setPassword("asdfasdf");
+	public Profile apiTest(HttpSession session) {
+		Profile profile = new Profile();
+		profile.setId("profileid");
+		profile.setName("username");
 		List<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			Post post = new Post();
@@ -35,12 +37,12 @@ public class JSONTest {
 			post.setImage(image);
 			posts.add(post);
 		}
-		user.setPosts(posts);
-		return user;
+		profile.setPosts(posts);
+		return profile;
 	}
-//	@GetMapping("/test2")
-//	public String apiTest2(HttpSession session) {
-//		session.setAttribute("test2","tst2 value");
-//		return "redirect:/test";
-//	}
+	@GetMapping("/test2")
+	public List<Post> apiTest2(HttpSession session) {
+		session.setAttribute("test2","tst2 value");
+		return postServ.getAll();
+	}
 }

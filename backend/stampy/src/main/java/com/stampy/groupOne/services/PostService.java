@@ -19,6 +19,7 @@ public class PostService {
 	public Post addImagePost(MultipartFile uploadedFile) {
 		Post post = new Post();
 		FileEntry image = fileServ.addImage(uploadedFile, "post");
+		post.setId(image.getId());
 		post.setImage(image);
 		return postRepo.save(post);
 	}

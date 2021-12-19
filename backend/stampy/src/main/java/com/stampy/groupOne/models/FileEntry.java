@@ -51,7 +51,9 @@ public class FileEntry {
 	
 	@PrePersist
 	protected void onCreate() {
-		this.createdAt = new Date();
+		Date date = new Date();
+		this.createdAt = date;
+		this.updatedAt = date;
 	}
 	@PreUpdate
 	protected void onUpdate() {
