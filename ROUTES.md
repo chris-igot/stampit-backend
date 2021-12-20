@@ -7,6 +7,8 @@
 `/home`  
 `/home/edit`  
 `/profile`
+`/search`
+`/follows`
 
 returns: "stampyReact.jsp"
 <br><br>
@@ -20,10 +22,18 @@ returns:
     "name": (string),
     "title": (string),
     "bio": (string),
+    "image": (string),
     "posts": [
         {
             "id": (string),
             "image": (string),
+            "stamps": [
+                {
+                    "image":(string),
+                    "x": (integer),
+                    "y": (integer)
+                },
+            ],
             "createdAt": (date string),
             "updatedAt": (date string)
         },
@@ -56,7 +66,63 @@ requires: _request body_
 returns: (redirect:/home)
 <br><br>
 
----
+### POST: `/api/profile/search`
+
+requires: _request body_
+
+```
+{
+    "search": (string),
+}
+```
+
+returns:
+
+```
+{
+    "results":[
+        {
+            "name": (string),
+            "title": (string),
+            "bio": (string),
+            "image": (string),
+        },
+    ]
+}
+```
+
+<br>
+### GET: `/api/follows`
+
+returns:
+
+```
+{
+    "follows":[
+        {
+            "name": (string),
+            "title": (string),
+            "bio": (string),
+            "image": (string),
+        },
+    ]
+}
+```
+
+<br>
+### POST: `/api/follows`
+
+requires: _request body_
+
+```
+{
+    "profile_id": (string),
+    "follow": (boolean)
+}
+```
+
+returns: (redirect:/follows)
+<br>
 
 ## Post routes
 
@@ -94,6 +160,13 @@ returns:
 {
     "id": (string),
     "image": (string),
+    "stamps": [
+        {
+            "image":(string),
+            "x": (integer),
+            "y": (integer)
+        },
+    ],
     "createdAt": (date string),
     "updatedAt": (date string)
 }
@@ -113,4 +186,18 @@ returns:
         "updatedAt": (date string)
     },
 ]
+```
+
+## Profile routes
+
+### POST: `/api/post/stamp`
+
+requires: _request body_
+
+```
+{
+    "image": (string),
+    "x": (integer),
+    "y": (integer),
+}
 ```

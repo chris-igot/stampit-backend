@@ -27,7 +27,7 @@ public class LoginController {
 	@Autowired
 	ProfileService profileServ;
 	
-	@GetMapping("/")
+	@GetMapping("/login")
 	public String root(@ModelAttribute("registerForm") User user) {
 		return "index.jsp";
 	}
@@ -40,7 +40,7 @@ public class LoginController {
 			session.setAttribute("id", user.getId());
 			session.setAttribute("profile_id", user.getProfile().getId());
 			System.out.println("profileid: "+user.getProfile().getId());
-			return "redirect:/";
+			return "redirect:/home";
 		} else {
 			model.addAttribute("loginError", "Invalid email/password");
 			return "index.jsp";			
@@ -60,7 +60,7 @@ public class LoginController {
 			session.setAttribute("email", user.getEmail());
 			session.setAttribute("id", newUser.getId());
 			session.setAttribute("profile_id", newProfile.getId());
-			return "redirect:/";
+			return "redirect:/home";
 		}
 	}
 	
@@ -68,6 +68,6 @@ public class LoginController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/";
+		return "redirect:/login";
 	}
 }
