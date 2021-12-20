@@ -22,6 +22,6 @@ public class ProfileService {
 	}
 	
 	public List<Profile> findName(String search) {
-		return profileRepo.findByNameStartingWith(search);
+		return profileRepo.findName(search);
 	}
 }

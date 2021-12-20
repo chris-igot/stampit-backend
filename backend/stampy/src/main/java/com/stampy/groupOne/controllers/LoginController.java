@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +28,17 @@ public class LoginController {
 	@Autowired
 	ProfileService profileServ;
 	
+	@GetMapping("/")
+	public String root(HttpSession session) {
+		if(session.getAttribute("id") != null) {
+			return "redirect:/home";
+		} else {
+			return "redirect:/login";
+		}
+	}
+	@CrossOrigin
 	@GetMapping("/login")
-	public String root(@ModelAttribute("registerForm") User user) {
+	public String loginPage(@ModelAttribute("registerForm") User user) {
 		return "index.jsp";
 	}
 	
