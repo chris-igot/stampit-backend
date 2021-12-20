@@ -36,7 +36,7 @@ public class LoginController {
 			return "redirect:/login";
 		}
 	}
-	@CrossOrigin
+
 	@GetMapping("/login")
 	public String loginPage(@ModelAttribute("registerForm") User user) {
 		return "index.jsp";

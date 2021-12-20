@@ -42,7 +42,6 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-	@CrossOrigin
 	@GetMapping("/api/public")
 	public ResponseEntity<List<Post>> getAPIPublic() {
 		List<Post> posts = postServ.getAll();
