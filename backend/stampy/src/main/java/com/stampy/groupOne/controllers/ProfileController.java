@@ -38,13 +38,13 @@ public class ProfileController {
 		}
 	}
 	
-	@PostMapping("/api/profile/edit")
+	@PostMapping("/api/home/edit")
 	public String postAPIProfileEdit (@RequestBody Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
 		Profile dbProfile = profileServ.getById(profileId);
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
 		profileServ.add(dbProfile);
-		return "redirect:/profile";
+		return "redirect:/home";
 	}
 }

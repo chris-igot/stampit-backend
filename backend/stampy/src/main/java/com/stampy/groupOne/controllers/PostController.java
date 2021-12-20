@@ -25,7 +25,7 @@ public class PostController {
 	ProfileService profileServ;
 	
 	@GetMapping("/api/post")
-	public ResponseEntity<Post> getAPIPost(@RequestParam("post") String postId) {
+	public ResponseEntity<Post> getAPIPost(@RequestParam("id") String postId) {
 		Post post = postServ.getById(postId);
 		if(post != null) {
 			return ResponseEntity.ok().body(post);
@@ -38,7 +38,7 @@ public class PostController {
 	public String postAPIPost(@RequestParam("file") MultipartFile uploadedFile,HttpSession session) {
 		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
 		postServ.addImagePost(uploadedFile,profile);
-		return "redirect:/profile";
+		return "redirect:/home";
 	}
 	@GetMapping("/api/public")
 	public ResponseEntity<List<Post>> getAPIPublic() {
