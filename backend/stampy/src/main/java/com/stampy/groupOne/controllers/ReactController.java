@@ -11,6 +11,16 @@ public class ReactController {
 	 * This is here for server redirects
 	 * */
 	public static final String reactPage = "stampyReact.jsp"; 
+	
+	@GetMapping("/home")
+	public String reactHome() {
+		return reactPage;
+	}
+	
+	@GetMapping("/home/edit")
+	public String reactHomeEdit() {
+		return reactPage;
+	}
 
 	@GetMapping("/profile")
 	public String reactProfile() {
