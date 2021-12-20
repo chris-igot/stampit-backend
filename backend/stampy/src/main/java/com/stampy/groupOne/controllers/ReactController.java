@@ -12,6 +12,11 @@ public class ReactController {
 	 * */
 	public static final String reactPage = "stampyReact.jsp"; 
 	
+	@GetMapping("/")
+	public String reactRoot() {
+		return reactPage;
+	}
+	
 	@GetMapping("/home")
 	public String reactHome() {
 		return reactPage;
