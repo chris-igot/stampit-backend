@@ -2,6 +2,7 @@ package com.stmps.groupOne.models;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,10 +17,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.stmps.groupOne.utilities.serialization.ImageSerializer;
 
 @Entity
 @Table(name = "profiles")
@@ -31,7 +35,13 @@ public class Profile {
 	@JsonIgnore
 	private String id;
 	private String name;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "image_id", referencedColumnName = "id")
+	@JsonSerialize(using = ImageSerializer.class)
+	private FileEntry image;
+	@Size(max = 50)
 	private String title;
+	@Size(max = 250)
 	private String bio;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -39,16 +49,19 @@ public class Profile {
 	private User user;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
 	private List<Post> posts;
-	@ManyToMany
+
+	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL)
+	
+	@JsonIgnore
+	private Set<Profile> followers;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
-	  name = "follows", 
-	  joinColumns = @JoinColumn(name = "you_id"), 
-	  inverseJoinColumns = @JoinColumn(name = "them_id"))
+		  name = "follows", 
+		  joinColumns = @JoinColumn(name = "you_id"), 
+		  inverseJoinColumns = @JoinColumn(name = "them_id"))
 	@JsonIgnore
-	private List<Profile> followers;
-	@JsonIgnore
-	@ManyToMany(mappedBy = "followers")
-	private List<Profile> amFollowing;
+	private Set<Profile> amFollowing;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -78,31 +91,38 @@ public class Profile {
 		this.updatedAt = new Date();
 	}
 	
+	public Boolean checkIfBeingFollowed(String other_id) {
+		for (Profile profile : this.followers) {
+			if(profile.getId().equals(other_id)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Boolean checkIfFollowing(String other_id) {
 		for (Profile profile : this.amFollowing) {
-			if(profile.getId() == other_id) {
+			if(profile.getId().equals(other_id)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	public Boolean checkIfFollowing(Profile otherProfile) {
-		return checkIfFollowing(otherProfile.getId());
+		return this.amFollowing.contains(otherProfile);
 	}
 	
-	public void addFollower(Profile otherProfile) {
-		if(!checkIfFollowing(otherProfile.getId())) {
-			this.amFollowing.add(otherProfile);
-		}
+	public void follow(Profile otherProfile) {
+		this.amFollowing.add(otherProfile);
 	}
-	public void removeFollower(String other_id) {
+	public void unfollow(String other_id) {
 		for (Profile profile : this.amFollowing) {
-			if(profile.getId() == other_id) {
+			if(profile.getId().equals(other_id)) {
 				this.amFollowing.remove(profile);
 			}
 		}
 	}
-	public void removeFollower(Profile otherProfile) {
+	public void unfollow(Profile otherProfile) {
 		if(checkIfFollowing(otherProfile.getId())) {
 			this.amFollowing.remove(otherProfile);
 		}
@@ -156,17 +176,23 @@ public class Profile {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public List<Profile> getFollowers() {
+	public Set<Profile> getFollowers() {
 		return followers;
 	}
-	public void setFollowers(List<Profile> followers) {
+	public void setFollowers(Set<Profile> followers) {
 		this.followers = followers;
 	}
-	public List<Profile> getAmFollowing() {
+	public Set<Profile> getAmFollowing() {
 		return amFollowing;
 	}
-	public void setAmFollowing(List<Profile> amFollowing) {
+	public void setAmFollowing(Set<Profile> amFollowing) {
 		this.amFollowing = amFollowing;
+	}
+	public FileEntry getImage() {
+		return image;
+	}
+	public void setImage(FileEntry image) {
+		this.image = image;
 	}
 	
 }

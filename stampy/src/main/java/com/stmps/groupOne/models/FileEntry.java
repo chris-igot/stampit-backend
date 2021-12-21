@@ -26,6 +26,9 @@ public class FileEntry {
 	private String category;
 	@OneToOne(mappedBy = "image")
 	@JsonIgnore
+	private Profile profile;
+	@OneToOne(mappedBy = "image")
+	@JsonIgnore
 	private Post post;
 	@JsonIgnore
 	private Date createdAt;
