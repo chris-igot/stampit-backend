@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -37,6 +39,16 @@ public class Profile {
 	private User user;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
 	private List<Post> posts;
+	@ManyToMany
+	@JoinTable(
+	  name = "follows", 
+	  joinColumns = @JoinColumn(name = "you_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "them_id"))
+	@JsonIgnore
+	private List<Profile> followers;
+	@JsonIgnore
+	@ManyToMany(mappedBy = "followers")
+	private List<Profile> amFollowing;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -65,6 +77,37 @@ public class Profile {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
+	
+	public Boolean checkIfFollowing(String other_id) {
+		for (Profile profile : this.amFollowing) {
+			if(profile.getId() == other_id) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public Boolean checkIfFollowing(Profile otherProfile) {
+		return checkIfFollowing(otherProfile.getId());
+	}
+	
+	public void addFollower(Profile otherProfile) {
+		if(!checkIfFollowing(otherProfile.getId())) {
+			this.amFollowing.add(otherProfile);
+		}
+	}
+	public void removeFollower(String other_id) {
+		for (Profile profile : this.amFollowing) {
+			if(profile.getId() == other_id) {
+				this.amFollowing.remove(profile);
+			}
+		}
+	}
+	public void removeFollower(Profile otherProfile) {
+		if(checkIfFollowing(otherProfile.getId())) {
+			this.amFollowing.remove(otherProfile);
+		}
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -112,6 +155,18 @@ public class Profile {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public List<Profile> getFollowers() {
+		return followers;
+	}
+	public void setFollowers(List<Profile> followers) {
+		this.followers = followers;
+	}
+	public List<Profile> getAmFollowing() {
+		return amFollowing;
+	}
+	public void setAmFollowing(List<Profile> amFollowing) {
+		this.amFollowing = amFollowing;
 	}
 	
 }
