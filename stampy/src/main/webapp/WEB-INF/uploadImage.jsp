@@ -7,9 +7,10 @@
 <t:menu/>
 <t:base>
 <div class="row">
-		<form method="POST" enctype="multipart/form-data" action="/stamp/new">
+		<form method="POST" enctype="multipart/form-data" action="/image/new">
 		<h5>File to upload:</h5>
 		<div><input type="text" name="name" /></div>
+		<div><input type="text" name="category" /></div>
 		<div><input type="file" name="file" /></div>
 		<div><input type="submit" value="Upload" /></div>
 		</form>

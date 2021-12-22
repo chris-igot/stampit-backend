@@ -7,21 +7,23 @@
 <t:menu/>
 <t:base>
 <div class="row">
-	<form class="col-md-6" action="/search" method="POST">
-		<div class="mb-3">
-			<label for="search" class="form-label mb-0">Search</label>
-			<input id="search" class="form-control" name="search" type="text"></input>
-			<input type="submit" value="Search" class="btn btn-primary" />
-		</div>
-	</form>
-</div>
-<div class="row">
-	<c:forEach items="${results}" var="profile">
-		<div>
-			<a href="/profile?id=${profile.id}">
-				<c:out value="${profile.name }"/>
-			</a>
-		</div>
-	</c:forEach>
+	<div class="col-sm-8 d-flex flex-wrap mx-auto">
+		<c:forEach items="${posts}" var="post">
+			<div class="col-4 card mb-1">
+				<a href="/post?id=${post.id}">
+	                <img
+	                    src="/img/${post.image.fileName }"
+	                    class="card-img-bottom"
+	                    alt=""
+	                />
+				</a>
+                <div class="card-body">
+                    <p class="text-end">
+                    	<a class="link-dark" href="/profile?id=${post.profile.id }"><c:out value="${post.profile.name }"/></a>
+                    </p>
+                </div>
+            </div>
+		</c:forEach>
+	</div>
 </div>
 </t:base>

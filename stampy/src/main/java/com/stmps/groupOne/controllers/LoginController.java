@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +37,13 @@ public class LoginController {
 	}
 
 	@GetMapping("/login")
-	public String loginPage(@ModelAttribute("registerForm") User user) {
+	public String loginPage() {
 		return "index.jsp";
+	}
+	
+	@GetMapping("/register")
+	public String registrationPage(@ModelAttribute("registerForm") User user) {
+		return "register.jsp";
 	}
 	
 	@PostMapping("/login")
@@ -62,7 +66,7 @@ public class LoginController {
 		usrValidator.validate(user, result);
 
 		if(result.hasErrors()) {
-			return "index.jsp";
+			return "register.jsp";
 			
 		} else {
 			User newUser = usrServ.add(user);

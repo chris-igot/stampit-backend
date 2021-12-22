@@ -66,7 +66,7 @@ public class StampController {
 			HttpSession session
 		) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
-		FileEntry image = fileServ.getEntryById("stamp2");
+		FileEntry image = fileServ.getEntryById("win");
 		Profile ownProfile = profileServ.getById(ownProfileId);
 		Post post = postServ.getById(postId);
 		
@@ -76,19 +76,5 @@ public class StampController {
 		stampServ.add(ownProfile, image, post, scaledX.intValue(), scaledY.intValue());
 		
 		return new ResponseEntity<Void>( HttpStatus.OK );
-	}
-	
-	@GetMapping("/stamp/new")
-	public String getStampNew() {
-		return "uploadstamp.jsp";
-	}
-	
-	@PostMapping("/stamp/new")
-	public String postStampNew(
-			@RequestParam("file") MultipartFile uploadedFile,
-			@RequestParam("name") String name
-		) {
-		fileServ.addImage(uploadedFile, "stamp", name);
-		return "redirect:/home";
 	}
 }

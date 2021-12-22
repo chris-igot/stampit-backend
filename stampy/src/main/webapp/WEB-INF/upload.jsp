@@ -6,15 +6,17 @@
 
 <t:menu/>
 <t:base>
-<div class="row">
-		<form method="POST" enctype="multipart/form-data" action="/post/new">
-		<h5>File to upload:</h5>
-		<div><input type="file" name="file" /></div>
-		<div><input type="submit" value="Upload" /></div>
+<div class="row justify-content-center">
+	<div class="col-auto">
+		<form class="card p-2" method="POST" enctype="multipart/form-data" action="/post/new">
+		<h5>Post a new photo</h5>
+		<div><input class="form-control" type="file" name="file" /></div>
+		<div><input class="mt-2 btn btn-outline-secondary" type="submit" value="Upload" /></div>
 		</form>
 		<div >
 			<c:out value="${message }"/>
 		</div>
+	</div>
 </div>
 
 </t:base>
