@@ -2,7 +2,7 @@
 
 <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-pblue">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/public">Stampeet!</a>
+        <a class="navbar-brand title-font" href="/public">stckIt!</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDark" aria-controls="navbarDark" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

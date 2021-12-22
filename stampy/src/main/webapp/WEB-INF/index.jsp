@@ -11,7 +11,8 @@
 <div class="row justify-content-center">
 	<form class="col-md-6" action="/login" method="POST">
 		<div class="card p-2">
-			<h3 class="my-3">Login</h3>
+			<h3 class="title-font mb-0">stckIt!</h3>
+			<h6 class="mt-0 mb-3">Login</h6>
 			<div class="mb-3">
 				<label for="email" class="form-label mb-0">Email:</label>
 				<input id="email" class="form-control" name="email" type="text"></input>

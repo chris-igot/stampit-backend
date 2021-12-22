@@ -11,7 +11,8 @@
 <div class="row justify-content-center">
 	<form:form class="col col-md-6" action="/register" method="POST" modelAttribute="registerForm">
 		<div class="card p-2">
-			<h3 class="my-3">Register</h3>
+			<h3 class="title-font mb-0">stckIt!</h3>
+			<h6 class="mt-0 my-3">Register</h6>
 			<div class="mb-3">
 				<form:label class="form-label mb-0" path="name" for="name">Name: </form:label>
 				<form:input type="text" class="form-control" path="name" id="name"></form:input>

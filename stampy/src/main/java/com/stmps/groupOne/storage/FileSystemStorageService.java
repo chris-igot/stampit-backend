@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.stmps.groupOne.storage.StorageProperties;
-
 @Service
 public class FileSystemStorageService implements StorageService {
 
