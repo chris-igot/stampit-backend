@@ -17,9 +17,9 @@
 	                    alt=""
 	                />
 				</a>
-                <div class="card-body">
-                    <p class="text-end">
-                    	<a class="link-dark" href="/profile?id=${post.profile.id }"><c:out value="${post.profile.name }"/></a>
+                <div class="card-body p-2">
+                    <p class="text-end m-0">
+                    	<span style="font-size:0.8rem">posted by</span> <a class="link-dark" href="/profile?id=${post.profile.id }"><c:out value="${post.profile.name }"/></a>
                     </p>
                 </div>
             </div>

@@ -45,11 +45,15 @@
 <div class="row">
 <div class="col-12 d-flex flex-wrap">
 	<c:forEach items="${profile.posts}" var="post">
-		<div class="align-items-center justify-content-center profile-photos-list" style="">
-			<a href="/post?id=${post.id }">
-				<img class="img-fluid" style="" src="/img/${post.image.fileName }" alt="" />
-			</a>
-		</div>
+			<div class="col-4 card mb-1">
+				<a href="/post?id=${post.id}">
+	                <img
+	                    src="/img/${post.image.fileName }"
+	                    class="card-img-bottom"
+	                    alt=""
+	                />
+				</a>
+            </div>
 	</c:forEach>
 </div>
 </div>

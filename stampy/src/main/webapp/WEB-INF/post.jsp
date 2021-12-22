@@ -18,7 +18,7 @@
              	<img src="/img/${post.image.fileName }" class="click-target card-img-bottom" style="cursor:pointer;" alt="winston place holder">
              </div>
              <div class="card-body">
-             	<a href="/post/stamp?id=${post.id }" class="btn btn-outline-success">Stamp It!</a>
+             	<a href="/post/stamp?id=${post.id }" class="btn btn-outline-success">Sticker!</a>
              </div>
          </div>
      </div>
