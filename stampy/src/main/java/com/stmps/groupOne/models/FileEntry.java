@@ -1,9 +1,12 @@
 package com.stmps.groupOne.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -30,6 +33,9 @@ public class FileEntry {
 	@OneToOne(mappedBy = "image")
 	@JsonIgnore
 	private Post post;
+	@OneToMany(mappedBy = "image", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Stamp> stamps;
 	@JsonIgnore
 	private Date createdAt;
 	@JsonIgnore

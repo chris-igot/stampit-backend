@@ -7,17 +7,19 @@
 <t:menu/>
 <t:base>
 <div class="row">
-	<h3 class="my-5">Profile info</h3>
+	<h3 class="my-5 text-center">Profile info</h3>
 </div>
 <div class="row">
-	<form method="POST" enctype="multipart/form-data" action="/home/setimage">
-		<h5>Upload a profile pic:</h5>
-		<div><input type="file" name="file" /></div>
-		<div><input type="submit" value="Upload" /></div>
-	</form>
+	<div class="col-auto">
+		<form method="POST" enctype="multipart/form-data" action="/home/setimage">
+			<h5>Upload a profile pic:</h5>
+			<div><input type="file" name="file" /></div>
+			<div><input type="submit" value="Upload" /></div>
+		</form>
+	</div>
 </div>
-<div class="row">
-	<form:form class="col col-md-6" action="/home/edit" method="POST" modelAttribute="profileEditForm">
+<div class="row justify-content-center">
+	<form:form class="col col-md-6-auto" action="/home/edit" method="POST" modelAttribute="profileEditForm">
 	    
 	    <div class="mb-3">		
 	        <form:label for="title" class="form-label mb-0" path="title">title:</form:label>

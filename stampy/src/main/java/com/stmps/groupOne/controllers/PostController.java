@@ -31,6 +31,12 @@ public class PostController {
 		model.addAttribute("post", post);
 		return "post.jsp";
 	}
+	@GetMapping("/post/stamp")
+	public String getPostStamp(@RequestParam("id") String postId, Model model) {
+		Post post = postServ.getById(postId);
+		model.addAttribute("post", post);
+		return "postStamp.jsp";
+	}
 	
 	@GetMapping("/post/new")
 	public String getPost() {

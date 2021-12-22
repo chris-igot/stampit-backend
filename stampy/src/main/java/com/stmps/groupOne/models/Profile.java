@@ -49,9 +49,10 @@ public class Profile {
 	private User user;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
 	private List<Post> posts;
+	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+	private List<Stamp> stamps;
 
 	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL)
-	
 	@JsonIgnore
 	private Set<Profile> followers;
 	
@@ -193,6 +194,12 @@ public class Profile {
 	}
 	public void setImage(FileEntry image) {
 		this.image = image;
+	}
+	public List<Stamp> getStamps() {
+		return stamps;
+	}
+	public void setStamps(List<Stamp> stamps) {
+		this.stamps = stamps;
 	}
 	
 }

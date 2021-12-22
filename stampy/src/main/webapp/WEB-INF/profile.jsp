@@ -40,7 +40,9 @@
 <div class="col-12 d-flex flex-wrap">
 	<c:forEach items="${profile.posts}" var="post">
 		<div class="align-items-center justify-content-center" style="width:15rem;height:15rem;background-color:121212;margin:1px">
-			<img class="img-fluid" style="max-width: 100%;max-height: 100%;" src="/img/${post.image.fileName }" alt="" />
+			<a href="/post?id=${post.id }">
+				<img class="img-fluid" style="max-width: 100%;max-height: 100%;" src="/img/${post.image.fileName }" alt="" />
+			</a>
 		</div>
 	</c:forEach>
 </div>
