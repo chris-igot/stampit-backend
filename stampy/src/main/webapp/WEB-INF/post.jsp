@@ -7,20 +7,21 @@
 <t:menu/>
 <t:base>
 <div class="row">
-     <div class="col">
+     <div class="col col-md-6 mx-auto">
          <div id="${post.id }" class="card post">
-             <span style="position:relative;overflow:hidden">
+             <div style="position: relative;">
              	<c:forEach items="${post.stamps}" var="stamp">
-					<div style="width:2rem;height:2rem;margin:1px;position:absolute;left:calc(${stamp.x/100}% - 16px);top:calc(${stamp.y/100}% - 16px)">
+					<div style="width:3rem;height:3rem;margin:1px;position:absolute;left:calc(${stamp.x/100}% - 24px);top:calc(${stamp.y/100}% - 24px)">
 							<img class="img-fluid" style="max-width: 100%;max-height: 100%;" src="/img/${stamp.image.fileName }" alt="" />
 					</div>
 				</c:forEach>
              	<img src="/img/${post.image.fileName }" class="click-target card-img-bottom" style="cursor:pointer;" alt="winston place holder">
-             </span>
+             </div>
              <div class="card-body">
-             <a href="/post/stamp?id=${post.id }" class="btn btn-outline-success">Stamp It!</a>
+             	<a href="/post/stamp?id=${post.id }" class="btn btn-outline-success">Stamp It!</a>
              </div>
          </div>
      </div>
 </div>
+
 </t:base>

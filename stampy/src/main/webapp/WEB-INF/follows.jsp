@@ -7,20 +7,34 @@
 <t:menu/>
 <t:base>
 <div class="row justify-content-center">
-	<div class="h5 text-center">Currently following</div>
-	  <div class="col-auto">
-		<c:forEach items="${following}" var="profile">
+	  <div class="col col-md-6">
+		<div class="card">
+			<h5 class="h5 card-title p-2">Currently following</h5>
 			<table class ="table table-hover">
-				<tr>
-					<td>
-						<a href="/profile?id=${profile.id}"><c:out value="${profile.name }"/></a>
-					</td>
-					<td>
-						<a class="btn btn-outline-dark" href="/profile/follows/unfollow?id=${profile.id }">Unfollow</a>
-					</td>
-				</tr>
+				<c:forEach items="${following}" var="profile">
+						<tr>
+							<td>
+								<div class="profile-pic-sm" style="">
+									<c:choose>
+										<c:when test="${profile.image == null }">
+											<img class="img-fluid" style="" src="/img/nopic.png" alt="" />
+										</c:when>
+										<c:when test="${profile.image != null }">
+											<img class="img-fluid" style="" src="/img/${profile.image.fileName }" alt="" />
+										</c:when>
+									</c:choose>
+								</div>
+							</td>
+							<td>
+								<a class="link-dark" href="/profile?id=${profile.id}"><c:out value="${profile.name }"/></a>
+							</td>
+							<td>
+								<a class="btn btn-outline-dark float-end" href="/profile/follows/unfollow?id=${profile.id }">Unfollow</a>
+							</td>
+						</tr>
+				</c:forEach>
 			</table>
-		</c:forEach>
+		</div>
 	  </div>
 </div>
 </t:base>
