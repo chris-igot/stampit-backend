@@ -6,21 +6,21 @@
 
 <t:menu/>
 <t:base>
-<div class="row">
-	<h5>Currently following</h5>
-	<c:forEach items="${following}" var="profile">
-		<div>
-			<table>
+<div class="row justify-content-center">
+	<div class="h5 text-center">Currently following</div>
+	  <div class="col-auto">
+		<c:forEach items="${following}" var="profile">
+			<table class ="table table-hover">
 				<tr>
 					<td>
 						<a href="/profile?id=${profile.id}"><c:out value="${profile.name }"/></a>
 					</td>
 					<td>
-						<a class="btn btn-outline-secondary" href="/profile/follows/unfollow?id=${profile.id }">Unfollow</a>
+						<a class="btn btn-outline-dark" href="/profile/follows/unfollow?id=${profile.id }">Unfollow</a>
 					</td>
 				</tr>
 			</table>
-		</div>
-	</c:forEach>
+		</c:forEach>
+	  </div>
 </div>
 </t:base>

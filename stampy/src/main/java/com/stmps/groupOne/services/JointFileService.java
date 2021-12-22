@@ -23,7 +23,7 @@ public class JointFileService {
 	@Autowired
 	StorageService storageServ;
 	
-	public FileEntry add(MultipartFile uploadedFile, String usage) {
+	public FileEntry add(MultipartFile uploadedFile, String category) {
 		/* 
 		 * Id must be generated here to ensure it matches filename
 		 * The for loop detects id collisions. 3 attempts total 
@@ -44,15 +44,35 @@ public class JointFileService {
 				String fileName = newFileId+"."+extension;
 				
 				storageServ.store(uploadedFile, fileName);
-				return fileEntryRepo.save(new FileEntry(newFileId, fileName, storageProperties.getLocation(), uploadedFile.getContentType(), usage));			
+				return fileEntryRepo.save(new FileEntry(newFileId, fileName, storageProperties.getLocation(), uploadedFile.getContentType(), category));			
 			}
 		}
 		return null;
 	}
 	
-	public FileEntry addImage(MultipartFile uploadedFile, String usage) {
+	public FileEntry add(MultipartFile uploadedFile, String category, String newFileId) {
+		String[] splitFileName = uploadedFile.getOriginalFilename().split("[.]");
+		String extension = "";
+		if(splitFileName.length > 0) {
+			extension = splitFileName[splitFileName.length-1].toLowerCase();			
+		}
+		
+		String fileName = newFileId+"."+extension;
+		
+		storageServ.store(uploadedFile, fileName);
+		return fileEntryRepo.save(new FileEntry(newFileId, fileName, storageProperties.getLocation(), uploadedFile.getContentType(), category));			
+	}
+	
+	public FileEntry addImage(MultipartFile uploadedFile, String category) {
 		if(uploadedFile.getContentType().startsWith("image")) {
-			return this.add(uploadedFile, usage);
+			return this.add(uploadedFile, category);
+		}
+		return null;
+	}
+	
+	public FileEntry addImage(MultipartFile uploadedFile, String category, String newFileId) {
+		if(uploadedFile.getContentType().startsWith("image")) {
+			return this.add(uploadedFile, category, newFileId);
 		}
 		return null;
 	}
