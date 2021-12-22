@@ -7,7 +7,7 @@
 <t:menu/>
 <t:base>
 <div class="row">
-	<div class="col-sm-8 d-flex flex-wrap mx-auto">
+	<div class="col-sm-12 d-flex flex-wrap mx-auto">
 		<c:forEach items="${posts}" var="post">
 			<div class="col-4 card mb-1">
 				<a href="/post?id=${post.id}">
