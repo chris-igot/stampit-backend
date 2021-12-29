@@ -1,22 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
-<t:menu/>
+<t:menu />
 <t:base>
-<div class="row">
+	<div class="row">
 		<form method="POST" enctype="multipart/form-data" action="/image/new">
-		<h5>File to upload:</h5>
-		<div><input type="text" name="name" /></div>
-		<div><input type="text" name="category" /></div>
-		<div><input type="file" name="file" /></div>
-		<div><input type="submit" value="Upload" /></div>
+			<h5>File to upload:</h5>
+			<div>
+				<input type="text" name="name" />
+			</div>
+			<div>
+				<input type="text" name="category" />
+			</div>
+			<div>
+				<input type="file" name="file" />
+			</div>
+			<div>
+				<input type="submit" value="Upload" />
+			</div>
 		</form>
-		<div >
-			<c:out value="${message }"/>
+		<div>
+			<c:out value="${message }" />
 		</div>
-</div>
+	</div>
 
 </t:base>
