@@ -65,14 +65,23 @@ public class StampController {
 			@RequestParam("postId") String postId,
 			HttpSession session
 		) {
+		return postAPIPostStampHere(x, y, boxDimX, boxDimY, postId, session);
+	}
+
+	@PostMapping("/api/post/stamp")
+	public ResponseEntity<Void> postAPIPostStampHere(
+			@RequestParam("x") Float x,@RequestParam("y") Float y,
+			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
+			@RequestParam("postId") String postId,
+			HttpSession session
+			) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
 		FileEntry image = fileServ.getEntryById("win");
 		Profile ownProfile = profileServ.getById(ownProfileId);
 		Post post = postServ.getById(postId);
-		
 		Float scaledX = (x / boxDimX) * 10000;
 		Float scaledY = (y / boxDimY) * 10000;
-
+		
 		stampServ.add(ownProfile, image, post, scaledX.intValue(), scaledY.intValue());
 		
 		return new ResponseEntity<Void>( HttpStatus.OK );

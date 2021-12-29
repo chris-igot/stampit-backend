@@ -10,7 +10,7 @@ import com.stmps.groupOne.models.FileEntry;
 public class ImageSerializer extends StdSerializer<FileEntry> {
 	private static final long serialVersionUID = 1L;
 	static private String imageRoute = "/img/"; 
-	static private String stampRoute = "/stamp/"; 
+	static private String stampRoute = "/stamp/";
 
 	public ImageSerializer() {
 		this(null);
@@ -23,6 +23,7 @@ public class ImageSerializer extends StdSerializer<FileEntry> {
 	public void serialize(FileEntry fileEntry, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		if(fileEntry.getCategory() != null) {
 			switch (fileEntry.getCategory()) {
+				case "profile":
 				case "post":
 					gen.writeString(imageRoute+fileEntry.getFileName());			
 					break;
@@ -34,7 +35,7 @@ public class ImageSerializer extends StdSerializer<FileEntry> {
 					break;
 			}
 		} else {
-			gen.writeString("");		
+			gen.writeString("");
 		}
 	}
 

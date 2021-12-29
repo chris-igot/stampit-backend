@@ -48,8 +48,10 @@ public class Profile {
 	@JsonIgnore
 	private User user;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Post> posts;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Stamp> stamps;
 
 	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL)
