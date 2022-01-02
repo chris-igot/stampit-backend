@@ -36,6 +36,28 @@ public class PostController {
 		}
 	}
 	
+	@GetMapping("/api/posts/user")
+	public ResponseEntity<List<Post>> getAPIPostUser(@RequestParam("id") String profileId) {
+		Profile profile = profileServ.getById(profileId);
+
+		if(profile != null) {
+			return ResponseEntity.ok().body(profile.getPosts());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping("/api/posts/self")
+	public ResponseEntity<List<Post>> getAPIPostSelf(HttpSession session) {
+		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
+
+		if(profile != null) {
+			return ResponseEntity.ok().body(profile.getPosts());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 	@PostMapping("/api/post/new")
 	public ResponseEntity<Void> postAPIPost(@RequestParam("file") MultipartFile uploadedFile,HttpSession session) {
 		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
