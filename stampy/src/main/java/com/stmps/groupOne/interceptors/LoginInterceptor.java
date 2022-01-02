@@ -17,16 +17,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 		if(userId == null) {
 			System.out.println("not logged in!");
+
 			response.sendRedirect("/login");
 		} 
-//		else {
-//			String route = request.getServletPath();
-//			if(route.equals("/")) {
-//				response.sendRedirect("/home");
-//			}
-//			
-//		}
-		
+
 		return true;
 	}
 }

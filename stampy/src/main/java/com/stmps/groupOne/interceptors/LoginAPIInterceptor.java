@@ -17,7 +17,8 @@ public class LoginAPIInterceptor implements HandlerInterceptor {
 
 		if(userId == null) {
 			System.out.println("not logged in!");
-			response.sendError(401, "Must log in first");
+			response.sendError(401);
+			return false;
 		} 
 		
 		return true;

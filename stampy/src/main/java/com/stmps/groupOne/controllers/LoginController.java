@@ -104,7 +104,7 @@ public class LoginController {
 
 			return new ResponseEntity<Void>( HttpStatus.OK );
 		} else {
-			return new ResponseEntity<Void>( HttpStatus.UNAUTHORIZED );	
+			return new ResponseEntity<Void>( HttpStatus.I_AM_A_TEAPOT );	
 		}
 	}
 	
