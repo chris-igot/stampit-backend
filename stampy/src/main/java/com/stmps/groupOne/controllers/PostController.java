@@ -25,43 +25,7 @@ public class PostController {
 	PostService postServ;
 	@Autowired
 	ProfileService profileServ;
-	
-	@GetMapping("/post")
-	public String getPost(@RequestParam("id") String postId, Model model) {
-		Post post = postServ.getById(postId);
-		model.addAttribute("post", post);
-		return "post.jsp";
-	}
-	@GetMapping("/post/stamp")
-	public String getPostStamp(@RequestParam("id") String postId, Model model) {
-		Post post = postServ.getById(postId);
-		model.addAttribute("post", post);
-		return "postStamp.jsp";
-	}
-	
-	@GetMapping("/post/new")
-	public String getPost() {
-		return "upload.jsp";
-	}
-	
-	@PostMapping("/post/new")
-	public String postPost(@RequestParam("file") MultipartFile uploadedFile,HttpSession session) {
-		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
-		postServ.addImagePost(uploadedFile,profile);
-		return "redirect:/home";
-	}
-	
-	@GetMapping("/public")
-	public String getPublic(Model model) {
-		List<Post> posts = postServ.getAll();
-		model.addAttribute("posts", posts);
-		return "public.jsp";
-	}
-	
-	/*
-	 * API Stuff
-	 * */
-	
+
 	@GetMapping("/api/post")
 	public ResponseEntity<Post> getAPIPost(@RequestParam("id") String postId) {
 		Post post = postServ.getById(postId);
