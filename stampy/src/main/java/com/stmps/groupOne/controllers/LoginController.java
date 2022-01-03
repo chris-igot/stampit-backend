@@ -1,18 +1,15 @@
 package com.stmps.groupOne.controllers;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.stmps.groupOne.models.Profile;
 import com.stmps.groupOne.models.User;
@@ -49,7 +46,7 @@ public class LoginController {
 		usrValidator.validate(user, result);
 
 		if(result.hasErrors()) {
-			return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );	
+			return new ResponseEntity<Void>( HttpStatus.I_AM_A_TEAPOT );	
 		} else {
 			User newUser = usrServ.add(user);
 			Profile newProfile = profileServ.add(new Profile(user.getName(),"","",user));
