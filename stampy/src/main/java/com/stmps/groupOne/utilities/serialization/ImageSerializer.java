@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.stmps.groupOne.models.FileEntry;
 
 public class ImageSerializer extends StdSerializer<FileEntry> {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6582219661871121216L;
 	static private String imageRoute = "/img/"; 
 	static private String stampRoute = "/stamp/";
 
