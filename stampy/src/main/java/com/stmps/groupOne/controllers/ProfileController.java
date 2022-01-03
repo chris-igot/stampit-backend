@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,11 +38,11 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/api/profile")
-	public ResponseEntity<Profile> getAPIProfile(@RequestParam("id") String profileId, HttpSession session) {
-		Profile profile = profileServ.getById(profileId);
-
-		if(profile != null) {
-			return ResponseEntity.ok().body(profile);
+	public ResponseEntity<Profile> getAPIProfile(@RequestParam("id") String otherProfileId, HttpSession session) {
+		Profile otherProfile = profileServ.getById(otherProfileId);
+		
+		if(otherProfile != null) {
+			return ResponseEntity.ok().body(otherProfile);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -71,6 +69,21 @@ public class ProfileController {
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
+	@GetMapping("/api/profile/follows")
+	public ResponseEntity<Set<Profile>> getAPIprofileList(Model model, HttpSession session) {
+		Set<Profile> results = profileServ.getById((String)session.getAttribute("profile_id")).getAmFollowing();
+		
+		return ResponseEntity.ok().body(results);
+	}
+
+	
+	@GetMapping("/api/profile/amfollowing")
+	public ResponseEntity<Boolean> getAPIprofileAmfollowing(@RequestParam("id") String otherProfileId, HttpSession session) {
+		Boolean amFollowing = profileServ.getById((String)session.getAttribute("profile_id")).checkIfFollowing(otherProfileId);
+		
+		return ResponseEntity.ok().body(amFollowing);
+	}
+	
 	@GetMapping("/api/profile/{follow}")
 	public ResponseEntity<Void> getAPIProfileFollow(@RequestParam("id") String otherProfileId, @PathVariable("follow") String followState, HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
@@ -88,15 +101,6 @@ public class ProfileController {
 		}
 
 		return new ResponseEntity<Void>( HttpStatus.OK );
-	}
-	
-	@GetMapping("/api/profile/follows")
-	public ResponseEntity<Set<Profile>> getAPIprofileList(Model model, HttpSession session) {
-		Set<Profile> results = profileServ.getById((String)session.getAttribute("profile_id")).getAmFollowing();
-
-		model.addAttribute("following", results);
-
-		return ResponseEntity.ok().body(results);
 	}
 	
 	@PostMapping("/api/search")
