@@ -1,5 +1,7 @@
 package com.stmps.groupOne.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.stmps.groupOne.models.FileEntry;
 import com.stmps.groupOne.models.Post;
 import com.stmps.groupOne.models.Profile;
+import com.stmps.groupOne.models.Stamp;
 import com.stmps.groupOne.services.JointFileService;
 import com.stmps.groupOne.services.PostService;
 import com.stmps.groupOne.services.ProfileService;
@@ -37,8 +39,6 @@ public class StampController {
 			@RequestParam("postId") String postId,
 			HttpSession session
 			) {
-		Object obj = new Object();
-		
 		System.out.println("\n\nClick!");
 		System.out.println(x);
 		System.out.println(y);
@@ -56,6 +56,16 @@ public class StampController {
 		
 		return new ResponseEntity<Void>( HttpStatus.OK );
 
+	}
+	
+	@GetMapping("/api/post/stamps")
+	public ResponseEntity<List<Stamp>> getAPIPostStamps(@RequestParam("id") String postId){
+		List<Stamp> stamps = stampServ.getPostStamps(postId);
+		if(stamps.size() > 0) {
+			return ResponseEntity.ok().body(stamps);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	@PostMapping("/post/stamp")
