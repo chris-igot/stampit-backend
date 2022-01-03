@@ -32,7 +32,6 @@ public class Profile {
 	@GeneratedValue(generator = "id-generator")
 	@GenericGenerator(name = "id-generator",
     strategy = "com.stmps.groupOne.utilities.generators.UrlSafeIdGenerator")
-	@JsonIgnore
 	private String id;
 	private String name;
 	@OneToOne(cascade = CascadeType.ALL)

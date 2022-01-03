@@ -1,6 +1,7 @@
 package com.stmps.groupOne.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,11 @@ public class PostService {
 		return postRepo.findAllByOrderByCreatedAtDesc();
 	}
 	public Post getById(String id) {
-		return postRepo.findById(id).get();
+		Optional<Post> optPost = postRepo.findById(id);
+		if(optPost.isPresent()) {
+			return optPost.get();
+		} else {
+			return new Post();
+		}
 	}
 }
