@@ -17,12 +17,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.stmps.groupOne.utilities.serialization.FollowSerializer;
 import com.stmps.groupOne.utilities.serialization.ImageSerializer;
 
 @Entity
@@ -54,7 +56,7 @@ public class Profile {
 	private List<Stamp> stamps;
 
 	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL)
-	@JsonIgnore
+	@JsonSerialize(using = FollowSerializer.class)
 	private Set<Profile> followers;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -62,14 +64,18 @@ public class Profile {
 		  name = "follows", 
 		  joinColumns = @JoinColumn(name = "you_id"), 
 		  inverseJoinColumns = @JoinColumn(name = "them_id"))
-	@JsonIgnore
+	@JsonSerialize(using = FollowSerializer.class)
 	private Set<Profile> amFollowing;
+	
+	@Transient
+	private Boolean currentlyFollowing;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
 		this.title = title;
 		this.bio = bio;
 	}
+	
 	public Profile(String name, String title, String bio, User user) {
 		this.name = name;
 		this.title = title;
@@ -93,7 +99,7 @@ public class Profile {
 		this.updatedAt = new Date();
 	}
 	
-	public Boolean checkIfBeingFollowed(String other_id) {
+	public Boolean beingFollowedBy(String other_id) {
 		for (Profile profile : this.followers) {
 			if(profile.getId().equals(other_id)) {
 				return true;
@@ -121,6 +127,7 @@ public class Profile {
 		for (Profile profile : this.amFollowing) {
 			if(profile.getId().equals(other_id)) {
 				this.amFollowing.remove(profile);
+				return;
 			}
 		}
 	}
@@ -202,5 +209,10 @@ public class Profile {
 	public void setStamps(List<Stamp> stamps) {
 		this.stamps = stamps;
 	}
-	
+	public Boolean getCurrentlyFollowing() {
+		return currentlyFollowing;
+	}
+	public void setCurrentlyFollowing(Boolean currentlyFollowing) {
+		this.currentlyFollowing = currentlyFollowing;
+	}
 }

@@ -1,5 +1,6 @@
 package com.stmps.groupOne.controllers;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,8 +42,10 @@ public class ProfileController {
 	@GetMapping("/api/profile")
 	public ResponseEntity<Profile> getAPIProfile(@RequestParam("id") String otherProfileId, HttpSession session) {
 		Profile otherProfile = profileServ.getById(otherProfileId);
+		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
 		
 		if(otherProfile != null) {
+			otherProfile.setCurrentlyFollowing(ownProfile.checkIfFollowing(otherProfile));
 			return ResponseEntity.ok().body(otherProfile);
 		} else {
 			return ResponseEntity.notFound().build();
@@ -49,14 +53,17 @@ public class ProfileController {
 	}
 	
 	@PostMapping("/api/home/edit")
-	public ResponseEntity<Void> postAPIProfileEdit (@RequestBody Profile profileForm, HttpSession session) {
+	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
 		Profile dbProfile = profileServ.getById(profileId);
 
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
 		profileServ.add(dbProfile);
-
+		System.out.println(profileForm.getBio());
+		System.out.println(profileForm.getTitle());
+		System.out.println(dbProfile.getBio());
+		System.out.println(dbProfile.getTitle());
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
@@ -71,7 +78,13 @@ public class ProfileController {
 	
 	@GetMapping("/api/profile/follows")
 	public ResponseEntity<Set<Profile>> getAPIprofileList(Model model, HttpSession session) {
-		Set<Profile> results = profileServ.getById((String)session.getAttribute("profile_id")).getAmFollowing();
+		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
+		Set<Profile> results = ownProfile.getAmFollowing();
+		
+		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+			Profile profile = (Profile) iterator.next();
+			profile.setCurrentlyFollowing(ownProfile.checkIfFollowing(profile));
+		}
 		
 		return ResponseEntity.ok().body(results);
 	}
@@ -104,8 +117,14 @@ public class ProfileController {
 	}
 	
 	@PostMapping("/api/search")
-	public ResponseEntity<List<Profile>> postAPISearch(@RequestParam("search") String searchString) {
+	public ResponseEntity<List<Profile>> postAPISearch(@RequestParam("search") String searchString, HttpSession session) {
 		List<Profile> results = profileServ.findName(searchString);
+		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
+		
+		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+			Profile profile = (Profile) iterator.next();
+			profile.setCurrentlyFollowing(ownProfile.checkIfFollowing(profile));
+		}
 
 		return ResponseEntity.ok().body(results);
 	}

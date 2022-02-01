@@ -29,8 +29,6 @@ public class FileController {
 	@GetMapping("/img/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-		System.out.println("UPLOAD - FILES");
-		
 		Resource file = fileServ.getImage(filename);
 		if(file != null) {
 			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
@@ -40,6 +38,17 @@ public class FileController {
 		}
 	}
 	
+	@GetMapping("/stamp/{filename:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> serveStamp(@PathVariable String filename) {
+		Resource file = fileServ.getImage(filename);
+		if(file != null) {
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 	
 	@GetMapping("/image/new")
 	public String getImageNew() {

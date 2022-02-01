@@ -21,6 +21,10 @@ public class StampService {
 		return stampRepo.save(stamp);
 	}
 	
+	public List<Stamp> getAllStamps() {
+		return stampRepo.findAll();
+	}
+	
 	public List<Stamp> getPostStamps(String postId) {
 		return stampRepo.findStampsByPost(postId);
 	}

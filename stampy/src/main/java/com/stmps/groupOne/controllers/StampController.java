@@ -32,40 +32,42 @@ public class StampController {
 	@Autowired
 	JointFileService fileServ;
 	
-	@PostMapping("/click")
-	public ResponseEntity<Void> getClickyWithIt(
-			@RequestParam("x") Float x,@RequestParam("y") Float y,
-			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
-			@RequestParam("postId") String postId,
-			HttpSession session
-			) {
-		System.out.println("\n\nClick!");
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println("Click!boxsize");
-		System.out.println(boxDimX);
-		System.out.println(boxDimY);
-		Float scaledX = (x / boxDimX) * 10000;
-		Float scaledY = (y / boxDimY) * 10000;
-		Integer relX = scaledX.intValue();
-		Integer relY = scaledY.intValue();
-		System.out.println("Click!relativepos");
-		System.out.println(relX);
-		System.out.println(relY);
-		System.out.println(postId);
-		
-		return new ResponseEntity<Void>( HttpStatus.OK );
-
+//	@PostMapping("/click")
+//	public ResponseEntity<Void> getClickyWithIt(
+//			@RequestParam("x") Float x,@RequestParam("y") Float y,
+//			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
+//			@RequestParam("postId") String postId,
+//			HttpSession session
+//			) {
+//		System.out.println("\n\nClick!");
+//		System.out.println(x);
+//		System.out.println(y);
+//		System.out.println("Click!boxsize");
+//		System.out.println(boxDimX);
+//		System.out.println(boxDimY);
+//		Float scaledX = (x / boxDimX) * 10000;
+//		Float scaledY = (y / boxDimY) * 10000;
+//		Integer relX = scaledX.intValue();
+//		Integer relY = scaledY.intValue();
+//		System.out.println("Click!relativepos");
+//		System.out.println(relX);
+//		System.out.println(relY);
+//		System.out.println(postId);
+//		
+//		return new ResponseEntity<Void>( HttpStatus.OK );
+//
+//	}
+	
+	@GetMapping("/api/stamps")
+	public List<Stamp> getAPIStamps() {
+		return stampServ.getAllStamps();
 	}
 	
 	@GetMapping("/api/post/stamps")
 	public ResponseEntity<List<Stamp>> getAPIPostStamps(@RequestParam("id") String postId){
 		List<Stamp> stamps = stampServ.getPostStamps(postId);
-		if(stamps.size() > 0) {
-			return ResponseEntity.ok().body(stamps);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+
+		return ResponseEntity.ok().body(stamps);
 	}
 	
 	@PostMapping("/post/stamp")

@@ -29,6 +29,9 @@ public class PostService {
 	public List<Post> getAll() {
 		return postRepo.findAllByOrderByCreatedAtDesc();
 	}
+	public List<Post> getAllFollowing(String userId) {
+		return postRepo.findAllFollowed(userId);
+	}
 	public Post getById(String id) {
 		Optional<Post> optPost = postRepo.findById(id);
 		if(optPost.isPresent()) {

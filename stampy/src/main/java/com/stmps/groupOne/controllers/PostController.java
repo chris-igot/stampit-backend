@@ -67,7 +67,7 @@ public class PostController {
 	@GetMapping("/api/public")
 	public ResponseEntity<List<Post>> getAPIPublic() {
 		List<Post> posts = postServ.getAll();
-		if(posts.size() > 0) {
+		if(posts != null) {
 			return ResponseEntity.ok().body(posts);
 		} else {
 			return ResponseEntity.notFound().build();
