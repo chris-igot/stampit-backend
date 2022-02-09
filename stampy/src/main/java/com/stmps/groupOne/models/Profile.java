@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stmps.groupOne.utilities.serialization.FollowSerializer;
 import com.stmps.groupOne.utilities.serialization.ImageSerializer;
+import com.stmps.groupOne.utilities.serialization.UserSerializer;
 
 @Entity
 @Table(name = "profiles")
@@ -44,9 +45,9 @@ public class Profile {
 	private String title;
 	@Size(max = 250)
 	private String bio;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	@JsonIgnore
+	@JsonSerialize(using = UserSerializer.class)
 	private User user;
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
 	@JsonIgnore
@@ -55,15 +56,15 @@ public class Profile {
 	@JsonIgnore
 	private List<Stamp> stamps;
 
-	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonSerialize(using = FollowSerializer.class)
 	private Set<Profile> followers;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(
 		  name = "follows", 
-		  joinColumns = @JoinColumn(name = "you_id"), 
-		  inverseJoinColumns = @JoinColumn(name = "them_id"))
+		  joinColumns = @JoinColumn(name = "youId"), 
+		  inverseJoinColumns = @JoinColumn(name = "themId"))
 	@JsonSerialize(using = FollowSerializer.class)
 	private Set<Profile> amFollowing;
 	
