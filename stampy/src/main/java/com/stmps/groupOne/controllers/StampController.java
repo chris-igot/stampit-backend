@@ -32,67 +32,72 @@ public class StampController {
 	@Autowired
 	JointFileService fileServ;
 	
-//	@PostMapping("/click")
-//	public ResponseEntity<Void> getClickyWithIt(
-//			@RequestParam("x") Float x,@RequestParam("y") Float y,
-//			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
-//			@RequestParam("postId") String postId,
-//			HttpSession session
-//			) {
-//		System.out.println("\n\nClick!");
-//		System.out.println(x);
-//		System.out.println(y);
-//		System.out.println("Click!boxsize");
-//		System.out.println(boxDimX);
-//		System.out.println(boxDimY);
-//		Float scaledX = (x / boxDimX) * 10000;
-//		Float scaledY = (y / boxDimY) * 10000;
-//		Integer relX = scaledX.intValue();
-//		Integer relY = scaledY.intValue();
-//		System.out.println("Click!relativepos");
-//		System.out.println(relX);
-//		System.out.println(relY);
-//		System.out.println(postId);
-//		
-//		return new ResponseEntity<Void>( HttpStatus.OK );
-//
-//	}
-	
-	@GetMapping("/api/stamps")
-	public List<Stamp> getAPIStamps() {
-		return stampServ.getAllStamps();
+	@PostMapping("/click")
+	public ResponseEntity<Void> getClickyWithIt(
+			@RequestParam("x") Float x,@RequestParam("y") Float y,
+			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
+			@RequestParam("postId") String postId,
+			@RequestParam("stampId") String stampId,
+			HttpSession session
+			) {
+		System.out.println("\n\nClick!");
+		System.out.println(x);
+		System.out.println(y);
+		System.out.println("Click!boxsize");
+		System.out.println(boxDimX);
+		System.out.println(boxDimY);
+		Float scaledX = (x / boxDimX) * 10000;
+		Float scaledY = (y / boxDimY) * 10000;
+		Integer relX = scaledX.intValue();
+		Integer relY = scaledY.intValue();
+		System.out.println("Click!relativepos");
+		System.out.println(relX);
+		System.out.println(relY);
+		System.out.println(postId);
+		System.out.println(stampId);
+		
+		return new ResponseEntity<Void>( HttpStatus.OK );
+
 	}
 	
-	@GetMapping("/api/post/stamps")
-	public ResponseEntity<List<Stamp>> getAPIPostStamps(@RequestParam("id") String postId){
+	@GetMapping("/api/stamps/all")
+//	public List<FileEntry> getAPIStampsAll() {
+	public ResponseEntity<List<FileEntry>> getAPIStampsAll() {
+		return ResponseEntity.ok().body(stampServ.getAllStamps());
+//		return new ResponseEntity<Void>( HttpStatus.OK );
+	}
+	
+	@GetMapping("/api/stamps")
+	public ResponseEntity<List<Stamp>> getAPIPostStamps(@RequestParam("postid") String postId){
 		List<Stamp> stamps = stampServ.getPostStamps(postId);
 
 		return ResponseEntity.ok().body(stamps);
 	}
 	
-	@PostMapping("/post/stamp")
-	public ResponseEntity<Void> postPostStampHere(
-			@RequestParam("x") Float x,@RequestParam("y") Float y,
-			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
-			@RequestParam("postId") String postId,
-			HttpSession session
-		) {
-		return postAPIPostStampHere(x, y, boxDimX, boxDimY, postId, session);
-	}
+//	@PostMapping("/post/stamp")
+//	public ResponseEntity<Void> postPostStampHere(
+//			@RequestParam("x") Float x,@RequestParam("y") Float y,
+//			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
+//			@RequestParam("postId") String postId,
+//			HttpSession session
+//		) {
+//		return postAPIPostStampHere(x, y, boxDimX, boxDimY, postId, session);
+//	}
 
-	@PostMapping("/api/post/stamp")
+	@PostMapping("/api/stamps/new")
 	public ResponseEntity<Void> postAPIPostStampHere(
 			@RequestParam("x") Float x,@RequestParam("y") Float y,
 			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
 			@RequestParam("postId") String postId,
+			@RequestParam("stampId") String stampId,
 			HttpSession session
 			) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
-		FileEntry image = fileServ.getEntryById("win");
+		FileEntry image = fileServ.getEntryById(stampId);
 		Profile ownProfile = profileServ.getById(ownProfileId);
 		Post post = postServ.getById(postId);
-		Float scaledX = (x / boxDimX) * 10000;
-		Float scaledY = (y / boxDimY) * 10000;
+		Float scaledX = ((x % boxDimX) / boxDimX) * 10000;
+		Float scaledY = ((y % boxDimY) / boxDimY) * 10000;
 		
 		stampServ.add(ownProfile, image, post, scaledX.intValue(), scaledY.intValue());
 		
