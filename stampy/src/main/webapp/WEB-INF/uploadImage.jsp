@@ -10,12 +10,15 @@
 		<form method="POST" enctype="multipart/form-data" action="/image/new">
 			<h5>File to upload:</h5>
 			<div>
+				name
 				<input type="text" name="name" />
 			</div>
 			<div>
+				category
 				<input type="text" name="category" />
 			</div>
 			<div>
+				file
 				<input type="file" name="file" />
 			</div>
 			<div>
