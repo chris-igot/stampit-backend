@@ -12,7 +12,7 @@ import com.stmps.groupOne.models.FileEntry;
 import com.stmps.groupOne.repositories.FileEntryRepository;
 import com.stmps.groupOne.storage.StorageProperties;
 import com.stmps.groupOne.storage.StorageService;
-import com.stmps.groupOne.utilities.random.RandGenerator;
+import com.stmps.groupOne.utilities.misc.RandGenerator;
 
 @Service
 public class JointFileService {
@@ -38,10 +38,10 @@ public class JointFileService {
 				String[] splitFileName = uploadedFile.getOriginalFilename().split("[.]");
 				String extension = "";
 				if(splitFileName.length > 0) {
-					extension = splitFileName[splitFileName.length-1].toLowerCase();			
+					extension = "."+splitFileName[splitFileName.length-1].toLowerCase();			
 				}
 				
-				String fileName = newFileId+"."+extension;
+				String fileName = newFileId+extension;
 				
 				storageServ.store(uploadedFile, fileName);
 				return fileEntryRepo.save(new FileEntry(newFileId, fileName, storageProperties.getLocation(), uploadedFile.getContentType(), category));			
