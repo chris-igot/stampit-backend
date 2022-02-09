@@ -1,5 +1,6 @@
 package com.stmps.groupOne.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -44,7 +45,7 @@ public class PostController {
 		if(profile != null) {
 			return ResponseEntity.ok().body(profile.getPosts());
 		} else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok().body(Collections.emptyList());
 		}
 	}
 	
@@ -65,7 +66,19 @@ public class PostController {
 		if(posts != null) {
 			return ResponseEntity.ok().body(posts);
 		} else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok().body(Collections.emptyList());
+		}
+	}
+	
+	@GetMapping("/api/posts/following")
+	public ResponseEntity<List<Post>> getAPIFollowing(HttpSession session){
+		String profileId = (String)session.getAttribute("profile_id");
+		List<Post> posts = postServ.getAllFollowing(profileId);
+		
+		if(posts != null) {
+			return ResponseEntity.ok().body(posts);
+		} else {
+			return ResponseEntity.ok().body(Collections.emptyList());
 		}
 	}
 
