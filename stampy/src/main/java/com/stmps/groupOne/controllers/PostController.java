@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,18 +25,8 @@ public class PostController {
 	PostService postServ;
 	@Autowired
 	ProfileService profileServ;
-
-	@GetMapping("/api/post")
-	public ResponseEntity<Post> getAPIPost(@RequestParam("id") String postId) {
-		Post post = postServ.getById(postId);
-		if(post != null) {
-			return ResponseEntity.ok().body(post);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
 	
-	@GetMapping("/api/posts/user")
+	@GetMapping("/api/posts")
 	public ResponseEntity<List<Post>> getAPIPostUser(@RequestParam("id") String profileId) {
 		Profile profile = profileServ.getById(profileId);
 
@@ -57,18 +48,32 @@ public class PostController {
 		}
 	}
 	
-	@PostMapping("/api/post/new")
-	public ResponseEntity<Void> postAPIPost(@RequestParam("file") MultipartFile uploadedFile,HttpSession session) {
+	@PostMapping("/api/posts/new")
+	public ResponseEntity<Void> postAPIPost(
+			@RequestParam("file") MultipartFile uploadedFile, 
+			@RequestParam("description") String description, 
+			HttpSession session
+		) {
 		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
-		postServ.addImagePost(uploadedFile,profile);
+		postServ.addImagePost(uploadedFile, description, profile);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/api/public")
+	@GetMapping("/api/posts/public")
 	public ResponseEntity<List<Post>> getAPIPublic() {
 		List<Post> posts = postServ.getAll();
 		if(posts != null) {
 			return ResponseEntity.ok().body(posts);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@GetMapping("/api/posts/{postid}")
+	public ResponseEntity<Post> getAPIPost(@PathVariable("postid") String postId) {
+		Post post = postServ.getById(postId);
+		if(post != null) {
+			return ResponseEntity.ok().body(post);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
