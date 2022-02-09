@@ -8,10 +8,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Component
 public class InterceptorAppConfig implements WebMvcConfigurer {
 	   @Autowired
-	   LoginInterceptor loginInterceptor;
+	   LoginAPIInterceptor loginAPIInterceptor;
+	   @Autowired
+	   AdminAPIInterceptor adminAPIInterceptor;
 
 	   @Override
 	   public void addInterceptors(InterceptorRegistry registry) {
-	      registry.addInterceptor(loginInterceptor).excludePathPatterns("/","/login","/register","/api/login","/api/register","/css/*");
+		   registry.addInterceptor(loginAPIInterceptor)
+		   			.excludePathPatterns("/","/api/login","/api/admin/login","/api/register","/api/logout","/css/*","/error");
+
+		   registry.addInterceptor(adminAPIInterceptor)
+		   			.addPathPatterns("/api/admin/**")
+		   			.excludePathPatterns("/","/api/login","/api/admin/login","/api/register","/api/logout","/css/*","/error");
+
 	   }
 }

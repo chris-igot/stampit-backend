@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "files")
 public class FileEntry {
 	@Id
-	@JsonIgnore
 	private String id;
 	@JsonIgnore
 	private String path;

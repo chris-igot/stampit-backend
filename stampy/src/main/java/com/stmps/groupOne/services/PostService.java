@@ -1,6 +1,7 @@
 package com.stmps.groupOne.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,10 @@ public class PostService {
 	PostRepository postRepo;
 	@Autowired
 	JointFileService fileServ;
-	public Post addImagePost(MultipartFile uploadedFile, Profile profile) {
+	public Post addImagePost(MultipartFile uploadedFile, String description, Profile profile) {
 		Post post = new Post();
-		FileEntry image = fileServ.addImage(uploadedFile, "post");
+		FileEntry image = fileServ.addImage(uploadedFile, "image");
+		post.setDescription(description);
 		post.setId(image.getId());
 		post.setImage(image);
 		post.setProfile(profile);
@@ -28,7 +30,15 @@ public class PostService {
 	public List<Post> getAll() {
 		return postRepo.findAllByOrderByCreatedAtDesc();
 	}
+	public List<Post> getAllFollowing(String userId) {
+		return postRepo.findAllFollowed(userId);
+	}
 	public Post getById(String id) {
-		return postRepo.findById(id).get();
+		Optional<Post> optPost = postRepo.findById(id);
+		if(optPost.isPresent()) {
+			return optPost.get();
+		} else {
+			return new Post();
+		}
 	}
 }

@@ -1,11 +1,14 @@
 @charset "ISO-8859-1";
-@import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
 
 .bg-oblue {
-    background-color: #0a2239;
+	background-color: #0a2239;
 }
+
 .bg-pblue {
-    background-color: #003566;
+	background-color: #003566;
 }
 
 .title-font {
@@ -13,45 +16,44 @@
 }
 
 .profile-photos-list {
-    width: 15rem;
-    height: 15rem;
-    background-color: #c5c5c5;
-    margin: 1px;
+	width: 15rem;
+	height: 15rem;
+	background-color: #c5c5c5;
+	margin: 1px;
 }
 
 .profile-post-photo {
-	height:100%;
-	width:100%;
-  	background-size:cover;
-  	-webkit-background-size: cover;
-  	-o-background-size: cover;
+	height: 100%;
+	width: 100%;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
 }
 
-.profile-pic,
-.profile-pic-sm {
-    margin: 1px;
-    position: relative;
+.profile-pic, .profile-pic-sm {
+	margin: 1px;
+	position: relative;
 }
+
 .profile-pic {
-    width: 100px;
-    height: 100px;
+	width: 100px;
+	height: 100px;
 }
 
 .profile-pic-sm {
-    width: 32px;
-    height: 32px;
+	width: 32px;
+	height: 32px;
 }
 
-.profile-pic > img,
-.profile-pic > img {
-    max-height: 100%;
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+.profile-pic>img, .profile-pic>img {
+	max-height: 100%;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
 }

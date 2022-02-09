@@ -10,12 +10,13 @@ import org.hibernate.MappingException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.Configurable;
 import org.hibernate.id.IdentifierGenerator;
+import org.hibernate.query.spi.NativeQueryImplementor;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.stmps.groupOne.utilities.random.RandGenerator;
+import com.stmps.groupOne.utilities.misc.RandGenerator;
 
 public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 	@Autowired
@@ -35,6 +36,7 @@ public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 		
 		String newId = RandGenerator.urlSafe();
 		String query = String.format(queryTemplate, newId);
+
 		Integer resultSize = session.createSQLQuery(query).list().size();
 
         for (int i = 0; i < 3; i++) {

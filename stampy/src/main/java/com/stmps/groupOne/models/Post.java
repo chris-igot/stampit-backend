@@ -21,6 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stmps.groupOne.utilities.serialization.ImageSerializer;
+import com.stmps.groupOne.utilities.serialization.ProfileSerializer;
 
 @Entity
 @Table(name = "posts")
@@ -32,14 +33,15 @@ public class Post {
 	private String id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	@JsonIgnore
-	//Serialize this to profile_id
+	@JsonSerialize(using = ProfileSerializer.class)
 	private Profile profile;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id", referencedColumnName = "id")
 	@JsonSerialize(using = ImageSerializer.class)
 	private FileEntry image;
+	private String description;
 	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Stamp> stamps;
 	
 	private Date createdAt;
@@ -91,5 +93,10 @@ public class Post {
 	public void setStamps(List<Stamp> stamps) {
 		this.stamps = stamps;
 	}
-	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}	
 }

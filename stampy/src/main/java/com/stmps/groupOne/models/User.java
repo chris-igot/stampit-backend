@@ -1,10 +1,18 @@
 package com.stmps.groupOne.models;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -15,20 +23,19 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.stmps.groupOne.utilities.serialization.RoleSerializer;
 
 @Entity
 @Table(name = "users")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonIgnore
 	private Long id;
 	@Size(min = 2, message = "Name must have at least 2 characters")
-//	@JsonIgnore
-	private String name;
+	private String username;
 	@Email(message = "Email must be valid")
 	@NotBlank
-	@JsonIgnore
 	private String email;
 	@Size(min = 8, message = "Password must at least be 8 characters!")
 	@JsonIgnore
@@ -36,8 +43,17 @@ public class User {
 	@Transient
 	@JsonIgnore
 	private String passwordConfirm;
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Profile profile;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(
+		  name = "user_has_roles", 
+		  joinColumns = @JoinColumn(name = "user_id"), 
+		  inverseJoinColumns = @JoinColumn(name = "role"))
+	@JsonSerialize(using = RoleSerializer.class)
+	private Set<Role> roles;
 	
 	@JsonIgnore
 	private Date createdAt;
@@ -54,17 +70,66 @@ public class User {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
+	
+	public void addRole(Role role) {
+		if(this.roles == null) {
+			this.roles = new HashSet<Role>();
+		}
+		this.roles.add(role);
+	}
+	
+	public void removeRole(String rollId) {
+		for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+			if(role.getId().equals(rollId)) {
+				this.roles.remove(role);
+				break;
+			}
+		}
+	}
+	
+	public Boolean hasRole(String rollId) {
+		Boolean output = false;
+		if(this.roles != null) {
+			for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
+				Role role = (Role) iterator.next();
+
+				if(role.getId().equals(rollId)) {
+					output = true;
+					break;
+				}
+			}
+		}
+		
+		return output;
+	}
+	
+	public Role getRole(String rollId) {
+		Role output = null;
+		if(this.roles == null) {
+			for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
+				Role role = (Role) iterator.next();
+				if(role.getId().equals(rollId)) {
+					output = role;
+					break;
+				}
+			}
+		}
+		
+		return output;
+	}
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String name) {
+		this.username = name;
 	}
 	public String getEmail() {
 		return email;
@@ -101,5 +166,11 @@ public class User {
 	}
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }
