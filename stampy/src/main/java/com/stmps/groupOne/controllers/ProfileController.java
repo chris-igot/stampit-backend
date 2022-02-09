@@ -27,7 +27,7 @@ public class ProfileController {
 	@Autowired
 	ProfileService profileServ;
 
-	@GetMapping("/api/home")
+	@GetMapping("/api/profiles/home")
 	public ResponseEntity<Profile> getAPIHome(HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
 		Profile profile = profileServ.getById(profileId);
@@ -39,7 +39,7 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/api/profile")
+	@GetMapping("/api/profiles")
 	public ResponseEntity<Profile> getAPIProfile(@RequestParam("id") String otherProfileId, HttpSession session) {
 		Profile otherProfile = profileServ.getById(otherProfileId);
 		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
@@ -52,7 +52,7 @@ public class ProfileController {
 		}
 	}
 	
-	@PostMapping("/api/home/edit")
+	@PostMapping("/api/profiles/home/edit")
 	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
 		Profile dbProfile = profileServ.getById(profileId);
@@ -67,7 +67,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
-	@PostMapping("/api/home/setimage")
+	@PostMapping("/api/profiles/home/setimage")
 	public ResponseEntity<Void> postProfileSetimage (@RequestParam("file") MultipartFile uploadedFile, HttpSession session) {
 		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
 
@@ -76,7 +76,7 @@ public class ProfileController {
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
-	@GetMapping("/api/profile/follows")
+	@GetMapping("/api/profiles/ownfollows")
 	public ResponseEntity<Set<Profile>> getAPIprofileList(Model model, HttpSession session) {
 		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
 		Set<Profile> results = ownProfile.getAmFollowing();
@@ -90,33 +90,27 @@ public class ProfileController {
 	}
 
 	
-	@GetMapping("/api/profile/amfollowing")
+	@GetMapping("/api/profiles/follows/amfollowing")
 	public ResponseEntity<Boolean> getAPIprofileAmfollowing(@RequestParam("id") String otherProfileId, HttpSession session) {
 		Boolean amFollowing = profileServ.getById((String)session.getAttribute("profile_id")).checkIfFollowing(otherProfileId);
 		
 		return ResponseEntity.ok().body(amFollowing);
 	}
 	
-	@GetMapping("/api/profile/{follow}")
+	@GetMapping("/api/profiles/{follow}")
 	public ResponseEntity<Void> getAPIProfileFollow(@RequestParam("id") String otherProfileId, @PathVariable("follow") String followState, HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
-		Profile ownProfile = profileServ.getById(ownProfileId);
 
 		if(followState.equals("unfollow")) {
-			System.out.println("unfollowing");
-			ownProfile.unfollow(otherProfileId);
-			profileServ.add(ownProfile);
+			profileServ.unfollow(ownProfileId, otherProfileId);
 		} else if(followState.equals("follow")) {
-			Profile otherProfile = profileServ.getById(otherProfileId);
-			ownProfile.follow(otherProfile);
-
-			profileServ.add(ownProfile);
+			profileServ.follow(ownProfileId, otherProfileId);
 		}
 
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
-	@PostMapping("/api/search")
+	@PostMapping("/api/profiles/search")
 	public ResponseEntity<List<Profile>> postAPISearch(@RequestParam("search") String searchString, HttpSession session) {
 		List<Profile> results = profileServ.findName(searchString);
 		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
