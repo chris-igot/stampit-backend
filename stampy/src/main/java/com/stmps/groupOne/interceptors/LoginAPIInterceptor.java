@@ -16,7 +16,6 @@ public class LoginAPIInterceptor implements HandlerInterceptor {
 //		String profileId = (String) request.getSession().getAttribute("profile_id");
 
 		if(userId == null) {
-			System.out.println("not logged in!");
 			response.sendError(401);
 			return false;
 		} 
