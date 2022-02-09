@@ -1,8 +1,12 @@
 package com.stmps.groupOne.controllers;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +30,7 @@ public class FileController {
 //		return "stampyReact.jsp";
 //	}
 
-	@GetMapping("/img/{filename:.+}")
+	@GetMapping("/image/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 		Resource file = fileServ.getImage(filename);
@@ -50,19 +54,32 @@ public class FileController {
 		}
 	}
 	
-	@GetMapping("/image/new")
-	public String getImageNew() {
-		return "uploadImage.jsp";
-	}
+//	@GetMapping("/image/new")
+//	public String getImageNew() {
+//		return "uploadImage.jsp";
+//	}
 	
-	@PostMapping("/image/new")
+	@PostMapping("/api/admin/image/new")
 	public String postImageNew(
 			@RequestParam("file") MultipartFile uploadedFile,
 			@RequestParam("name") String name,
 			@RequestParam("name") String category
 		) {
-		fileServ.addImage(uploadedFile, "stamp", name);
+		fileServ.addImage(uploadedFile, category, name);
 		return "redirect:/image/new";
+	}
+	
+	@PostMapping("/api/admin/stamps/multiplenew")
+	public ResponseEntity<Void> postStampsMultipleNew(
+			@RequestParam("files") MultipartFile[] uploadedFiles
+			) {
+		System.out.println("filecount"+uploadedFiles.length);
+		for (int i = 0; i < uploadedFiles.length; i++) {
+			MultipartFile file = uploadedFiles[i];
+			fileServ.addImage(file, "stamp", file.getOriginalFilename().split("[.]")[0]);
+		}
+
+		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 
 //	@PostMapping("/upload")
