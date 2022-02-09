@@ -39,6 +39,7 @@ public class Post {
 	@JoinColumn(name = "image_id", referencedColumnName = "id")
 	@JsonSerialize(using = ImageSerializer.class)
 	private FileEntry image;
+	private String description;
 	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Stamp> stamps;
@@ -92,5 +93,10 @@ public class Post {
 	public void setStamps(List<Stamp> stamps) {
 		this.stamps = stamps;
 	}
-	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}	
 }

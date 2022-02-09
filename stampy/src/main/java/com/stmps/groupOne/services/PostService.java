@@ -18,9 +18,10 @@ public class PostService {
 	PostRepository postRepo;
 	@Autowired
 	JointFileService fileServ;
-	public Post addImagePost(MultipartFile uploadedFile, Profile profile) {
+	public Post addImagePost(MultipartFile uploadedFile, String description, Profile profile) {
 		Post post = new Post();
-		FileEntry image = fileServ.addImage(uploadedFile, "post");
+		FileEntry image = fileServ.addImage(uploadedFile, "image");
+		post.setDescription(description);
 		post.setId(image.getId());
 		post.setImage(image);
 		post.setProfile(profile);
