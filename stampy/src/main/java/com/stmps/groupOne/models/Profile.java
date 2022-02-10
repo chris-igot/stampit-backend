@@ -70,6 +70,8 @@ public class Profile {
 	
 	@Transient
 	private Boolean currentlyFollowing;
+	@Transient
+	private Boolean isPrivate;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -215,5 +217,8 @@ public class Profile {
 	}
 	public void setCurrentlyFollowing(Boolean currentlyFollowing) {
 		this.currentlyFollowing = currentlyFollowing;
+	}
+	public Boolean getIsPrivate() {
+		return this.user.hasRole("private");
 	}
 }

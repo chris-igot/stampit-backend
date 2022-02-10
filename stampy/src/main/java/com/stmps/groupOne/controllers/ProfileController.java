@@ -15,17 +15,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.stmps.groupOne.models.Profile;
+import com.stmps.groupOne.models.User;
 import com.stmps.groupOne.services.ProfileService;
+import com.stmps.groupOne.services.RoleService;
+import com.stmps.groupOne.services.UserService;
 
 @Controller
 public class ProfileController {
 	@Autowired
 	ProfileService profileServ;
+	@Autowired
+	UserService usrServ;
+	@Autowired
+	RoleService roleServ;
 
 	@GetMapping("/api/profiles/home")
 	public ResponseEntity<Profile> getAPIHome(HttpSession session) {
@@ -55,15 +61,21 @@ public class ProfileController {
 	@PostMapping("/api/profiles/home/edit")
 	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
+		Long userId = (Long) session.getAttribute("id");
 		Profile dbProfile = profileServ.getById(profileId);
+		User user = usrServ.getById(userId);
+		
+		if(profileForm.getIsPrivate() == true) {
+			user.addRole(roleServ.getRole("private"));
+			usrServ.add(user);
+		} else {
+			user.removeRole("private");
+			usrServ.add(user);
+		}
 
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
 		profileServ.add(dbProfile);
-		System.out.println(profileForm.getBio());
-		System.out.println(profileForm.getTitle());
-		System.out.println(dbProfile.getBio());
-		System.out.println(dbProfile.getTitle());
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
