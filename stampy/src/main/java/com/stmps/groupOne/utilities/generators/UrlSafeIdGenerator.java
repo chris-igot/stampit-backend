@@ -16,7 +16,7 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.stmps.groupOne.utilities.misc.RandGenerator;
+import com.stmps.groupOne.utilities.misc.CreateRandom;
 
 public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 	@Autowired
@@ -34,14 +34,14 @@ public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 		String dbTable = object.getClass().getAnnotation(Table.class).name();
 		String queryTemplate = "select "+dbId+" from "+dbTable+" where "+dbId+" = '%s'";
 		
-		String newId = RandGenerator.urlSafe();
+		String newId = CreateRandom.urlSafe();
 		String query = String.format(queryTemplate, newId);
 
 		Integer resultSize = session.createSQLQuery(query).list().size();
 
         for (int i = 0; i < 3; i++) {
         	if(resultSize > 0) {
-        		newId = RandGenerator.urlSafe();
+        		newId = CreateRandom.urlSafe();
         		query = String.format(queryTemplate, newId);
         		resultSize = session.createSQLQuery(query).list().size();
         	} else {

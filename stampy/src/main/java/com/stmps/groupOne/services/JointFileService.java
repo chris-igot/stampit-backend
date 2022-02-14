@@ -12,7 +12,7 @@ import com.stmps.groupOne.models.FileEntry;
 import com.stmps.groupOne.repositories.FileEntryRepository;
 import com.stmps.groupOne.storage.StorageProperties;
 import com.stmps.groupOne.storage.StorageService;
-import com.stmps.groupOne.utilities.misc.RandGenerator;
+import com.stmps.groupOne.utilities.misc.CreateRandom;
 
 @Service
 public class JointFileService {
@@ -28,11 +28,11 @@ public class JointFileService {
 		 * Id must be generated here to ensure it matches filename
 		 * The for loop detects id collisions. 3 attempts total 
 		 * */
-		String newFileId = RandGenerator.urlSafe();
+		String newFileId = CreateRandom.urlSafe();
 		Optional<FileEntry> existingFile = fileEntryRepo.findById(newFileId);
 		for (int i = 0; i < 3; i++) {
 			if(existingFile.isPresent()) {
-				newFileId = RandGenerator.urlSafe();
+				newFileId = CreateRandom.urlSafe();
 				existingFile = fileEntryRepo.findById(newFileId);
 			} else {
 				String[] splitFileName = uploadedFile.getOriginalFilename().split("[.]");

@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 
 import com.stmps.groupOne.fixeddata.StringData;
 
-public class RandGenerator {
+public class CreateRandom {
 	public static String urlSafe(int length) {
 		String out = "";
 		for (int i = 0; i < length; i++) {
