@@ -2,7 +2,6 @@ package com.stmps.groupOne.controllers;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.stmps.groupOne.models.Profile;
-import com.stmps.groupOne.models.User;
 import com.stmps.groupOne.services.ProfileService;
 import com.stmps.groupOne.services.RoleService;
 import com.stmps.groupOne.services.UserService;
@@ -168,7 +165,6 @@ public class ProfileController {
 	public ResponseEntity<List<Profile>> postAPISearch(@RequestParam("search") String searchString, HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
 		List<Profile> results = profileServ.findName(searchString);
-		Profile ownProfile = profileServ.getById(ownProfileId);
 		
 		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();

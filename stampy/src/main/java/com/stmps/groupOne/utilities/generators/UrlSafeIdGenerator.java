@@ -10,7 +10,6 @@ import org.hibernate.MappingException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.Configurable;
 import org.hibernate.id.IdentifierGenerator;
-import org.hibernate.query.spi.NativeQueryImplementor;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
