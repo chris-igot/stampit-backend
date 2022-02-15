@@ -43,6 +43,9 @@ public class User {
 	@Transient
 	@JsonIgnore
 	private String passwordConfirm;
+	@Transient
+	@JsonIgnore
+	private Boolean isPrivate;	//Used for profile privacy on registration
 	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Profile profile;
@@ -79,7 +82,7 @@ public class User {
 	}
 	
 	public void removeRole(String rollId) {
-		for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
+		for (Iterator<Role> iterator = this.getRoles().iterator(); iterator.hasNext();) {
 			Role role = (Role) iterator.next();
 			if(role.getId().equals(rollId)) {
 				this.roles.remove(role);
@@ -90,14 +93,13 @@ public class User {
 	
 	public Boolean hasRole(String rollId) {
 		Boolean output = false;
-		if(this.roles != null) {
-			for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
-				Role role = (Role) iterator.next();
 
-				if(role.getId().equals(rollId)) {
-					output = true;
-					break;
-				}
+		for (Iterator<Role> iterator = this.getRoles().iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+
+			if(role.getId().equals(rollId)) {
+				output = true;
+				break;
 			}
 		}
 		
@@ -106,13 +108,11 @@ public class User {
 	
 	public Role getRole(String rollId) {
 		Role output = null;
-		if(this.roles == null) {
-			for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
-				Role role = (Role) iterator.next();
-				if(role.getId().equals(rollId)) {
-					output = role;
-					break;
-				}
+		for (Iterator<Role> iterator = this.getRoles().iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+			if(role.getId().equals(rollId)) {
+				output = role;
+				break;
 			}
 		}
 		
@@ -172,5 +172,11 @@ public class User {
 	}
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	public Boolean getIsPrivate() {
+		return isPrivate;
+	}
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 }

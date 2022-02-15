@@ -1,5 +1,6 @@
 package com.stmps.groupOne.models;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +89,14 @@ public class Post {
 		this.profile = profile;
 	}
 	public List<Stamp> getStamps() {
+		List<Stamp> stamps;
+
+		if(this.stamps == null) {
+			stamps = Collections.emptyList();
+		} else {
+			stamps = this.stamps;
+		}
+
 		return stamps;
 	}
 	public void setStamps(List<Stamp> stamps) {

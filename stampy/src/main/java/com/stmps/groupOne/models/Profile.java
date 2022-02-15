@@ -1,5 +1,6 @@
 package com.stmps.groupOne.models;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +71,7 @@ public class Profile {
 	private Set<Profile> amFollowing;
 	
 	@Transient
-	private Boolean currentlyFollowing;
+	private Integer currentlyFollowing;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -78,10 +79,11 @@ public class Profile {
 		this.bio = bio;
 	}
 	
-	public Profile(String name, String title, String bio, User user) {
+	public Profile(String name, String title, String bio, Boolean isPrivate, User user) {
 		this.name = name;
 		this.title = title;
 		this.bio = bio;
+		this.isPrivate = isPrivate;
 		this.user = user;
 	}
 	
@@ -102,7 +104,7 @@ public class Profile {
 	}
 	
 	public Boolean beingFollowedBy(String other_id) {
-		for (Profile profile : this.followers) {
+		for (Profile profile : this.getFollowers()) {
 			if(profile.getId().equals(other_id)) {
 				return true;
 			}
@@ -111,7 +113,7 @@ public class Profile {
 	}
 	
 	public Boolean checkIfFollowing(String other_id) {
-		for (Profile profile : this.amFollowing) {
+		for (Profile profile : this.getAmFollowing()) {
 			if(profile.getId().equals(other_id)) {
 				return true;
 			}
@@ -126,7 +128,7 @@ public class Profile {
 		this.amFollowing.add(otherProfile);
 	}
 	public void unfollow(String other_id) {
-		for (Profile profile : this.amFollowing) {
+		for (Profile profile : this.getAmFollowing()) {
 			if(profile.getId().equals(other_id)) {
 				this.amFollowing.remove(profile);
 				return;
@@ -164,6 +166,14 @@ public class Profile {
 		this.bio = bio;
 	}
 	public List<Post> getPosts() {
+		List<Post> posts;
+
+		if(this.posts == null) {
+			posts = Collections.emptyList();
+		} else {
+			posts = this.posts;
+		}
+
 		return posts;
 	}
 	public void setPosts(List<Post> posts) {
@@ -188,12 +198,28 @@ public class Profile {
 		this.user = user;
 	}
 	public Set<Profile> getFollowers() {
+		Set<Profile> followers;
+
+		if(this.followers == null) {
+			followers = Collections.emptySet();
+		} else {
+			followers = this.followers;
+		}
+
 		return followers;
 	}
 	public void setFollowers(Set<Profile> followers) {
 		this.followers = followers;
 	}
 	public Set<Profile> getAmFollowing() {
+		Set<Profile> amFollowing;
+
+		if(this.amFollowing == null) {
+			amFollowing = Collections.emptySet();
+		} else {
+			amFollowing = this.amFollowing;
+		}
+
 		return amFollowing;
 	}
 	public void setAmFollowing(Set<Profile> amFollowing) {
@@ -206,15 +232,23 @@ public class Profile {
 		this.image = image;
 	}
 	public List<Stamp> getStamps() {
+		List<Stamp> stamps;
+
+		if(this.stamps == null) {
+			stamps = Collections.emptyList();
+		} else {
+			stamps = this.stamps;
+		}
+
 		return stamps;
 	}
 	public void setStamps(List<Stamp> stamps) {
 		this.stamps = stamps;
 	}
-	public Boolean getCurrentlyFollowing() {
+	public Integer getCurrentlyFollowing() {
 		return currentlyFollowing;
 	}
-	public void setCurrentlyFollowing(Boolean currentlyFollowing) {
+	public void setCurrentlyFollowing(Integer currentlyFollowing) {
 		this.currentlyFollowing = currentlyFollowing;
 	}
 	public Boolean getIsPrivate() {
