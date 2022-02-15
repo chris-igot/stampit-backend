@@ -16,14 +16,14 @@ public class Follow {
 	String youId;
 	@Id
 	String themId;
-	Boolean followGranted;
+	Boolean followVerified;
 	
 	public Follow() {}
 	
-	public Follow(String ownId, String otherId, Boolean followGranted) {
+	public Follow(String ownId, String otherId, Boolean followVerified) {
 		this.youId = ownId;
 		this.themId = otherId;
-		this.followGranted = followGranted;
+		this.followVerified = followVerified;
 	}
 	
 	public String getYouId() {
@@ -38,10 +38,11 @@ public class Follow {
 	public void setThemId(String themId) {
 		this.themId = themId;
 	}
-	public Boolean getFollowGranted() {
-		return followGranted;
+	public Boolean getFollowVerified() {
+		return followVerified;
 	}
-	public void setFollowGranted(Boolean followGranted) {
-		this.followGranted = followGranted;
+
+	public void setFollowVerified(Boolean followVerified) {
+		this.followVerified = followVerified;
 	}
 }
