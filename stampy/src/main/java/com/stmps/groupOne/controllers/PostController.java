@@ -57,11 +57,7 @@ public class PostController {
 	public ResponseEntity<List<Post>> getAPIPostSelf(HttpSession session) {
 		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
 
-		if(profile != null) {
-			return ResponseEntity.ok().body(profile.getPosts());
-		} else {
-			return ResponseEntity.ok().body(Collections.emptyList());
-		}
+		return ResponseEntity.ok().body(profile.getPosts());
 	}
 	
 	@PostMapping("/api/posts/new")
@@ -77,24 +73,14 @@ public class PostController {
 	
 	@GetMapping("/api/posts/public")
 	public ResponseEntity<List<Post>> getAPIPublic() {
-		List<Post> posts = postServ.getAllPublic();
-		if(posts != null) {
-			return ResponseEntity.ok().body(posts);
-		} else {
-			return ResponseEntity.ok().body(Collections.emptyList());
-		}
+		return ResponseEntity.ok().body(postServ.getAllPublic());
 	}
 	
 	@GetMapping("/api/posts/following")
 	public ResponseEntity<List<Post>> getAPIFollowing(HttpSession session){
 		String profileId = (String)session.getAttribute("profile_id");
-		List<Post> posts = postServ.getAllFollowed(profileId);
-		
-		if(posts != null) {
-			return ResponseEntity.ok().body(posts);
-		} else {
-			return ResponseEntity.ok().body(Collections.emptyList());
-		}
+
+		return ResponseEntity.ok().body( postServ.getAllFollowed(profileId));
 	}
 
 	@GetMapping("/api/posts/{postid}")
