@@ -42,8 +42,6 @@ public class StampyConfiguration {
 			userServ.add(newAdmin);
 			
 			roleServ.addRole("user");
-			roleServ.addRole("public");
-			roleServ.addRole("private");
 			System.out.println("Admin init");
 		}
 	}

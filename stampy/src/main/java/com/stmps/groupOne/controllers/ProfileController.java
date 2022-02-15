@@ -61,20 +61,11 @@ public class ProfileController {
 	@PostMapping("/api/profiles/home/edit")
 	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
-		Long userId = (Long) session.getAttribute("id");
 		Profile dbProfile = profileServ.getById(profileId);
-		User user = usrServ.getById(userId);
-		
-		if(profileForm.getIsPrivate() == true) {
-			user.addRole(roleServ.getRole("private"));
-			usrServ.add(user);
-		} else {
-			user.removeRole("private");
-			usrServ.add(user);
-		}
 
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
+		dbProfile.setIsPrivate(profileForm.getIsPrivate());
 		profileServ.add(dbProfile);
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}

@@ -45,6 +45,7 @@ public class Profile {
 	private String title;
 	@Size(max = 250)
 	private String bio;
+	private Boolean isPrivate;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonSerialize(using = UserSerializer.class)
@@ -70,8 +71,6 @@ public class Profile {
 	
 	@Transient
 	private Boolean currentlyFollowing;
-	@Transient
-	private Boolean isPrivate;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -219,6 +218,9 @@ public class Profile {
 		this.currentlyFollowing = currentlyFollowing;
 	}
 	public Boolean getIsPrivate() {
-		return this.user.hasRole("private");
+		return isPrivate;
 	}
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}	
 }

@@ -48,7 +48,7 @@ public class ProfileService {
 		Profile ownProfile = this.getById(ownProfileId);
 		Profile otherProfile = this.getById(otherProfileId);
 
-		if (otherProfile.getUser().hasRole("private")) {
+		if (otherProfile.getIsPrivate()) {
 			followRepo.save(new Follow(ownProfile.getId(), otherProfile.getId(), false));
 		} else {
 			followRepo.save(new Follow(ownProfile.getId(), otherProfile.getId(), true));
