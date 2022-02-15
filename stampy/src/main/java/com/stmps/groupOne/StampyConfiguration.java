@@ -22,7 +22,8 @@ public class StampyConfiguration {
 		if(userServ.getAll().size() == 0) {
 			String adminName = "admin";
 			String adminEmail= "admin@stmpd.com";
-			String adminPassword = CreateRandom.password(3);
+//			String adminPassword = CreateRandom.password(3);
+			String adminPassword = "asdfasdf";
 			CreateFile.text(
 					"Administrator Info\n******************" +
 					"\nname: " + adminName +
