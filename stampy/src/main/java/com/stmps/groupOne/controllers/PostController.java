@@ -43,7 +43,7 @@ public class PostController {
 				response = ResponseEntity.ok().body(profile.getPosts());
 				break;
 			default:
-				response = ResponseEntity.notFound().build();
+				response = ResponseEntity.ok().body(Collections.emptyList());
 				break;
 			}
 		} else {
