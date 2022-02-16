@@ -60,13 +60,13 @@ public class ProfileService {
 	
 	public Integer checkFollowStatus(String ownProfileId, String theirProfileId) {
 		FollowCompositeKey followKey = new FollowCompositeKey(ownProfileId, theirProfileId);
-		Follow follow = followRepo.findById(followKey).get();
+		Optional<Follow> followOpt = followRepo.findById(followKey);
 		Integer status = 0;
 		
-		if(follow == null) {
+		if(followOpt.isEmpty()) {
 			status = 0;
 		} else {
-			if(follow.getFollowVerified()) {
+			if(followOpt.get().getFollowVerified()) {
 				status = 2;
 			} else {
 				status = 1;
@@ -77,7 +77,7 @@ public class ProfileService {
 	}
 	
 	public Boolean verifyFollowerRequest(Boolean grantFollow, String ownProfileId, String theirProfileId) {
-		FollowCompositeKey followKey = new FollowCompositeKey(ownProfileId, theirProfileId);
+		FollowCompositeKey followKey = new FollowCompositeKey(theirProfileId, ownProfileId);
 		Optional<Follow> followOpt = followRepo.findById(followKey);
 		Boolean success = false;
 		
