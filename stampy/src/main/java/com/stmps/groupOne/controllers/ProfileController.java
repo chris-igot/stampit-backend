@@ -60,7 +60,7 @@ public class ProfileController {
 	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
 		Profile dbProfile = profileServ.getById(profileId);
-
+		System.out.println("isprivate:"+profileForm.getIsPrivate());
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
 		dbProfile.setIsPrivate(profileForm.getIsPrivate());
@@ -152,7 +152,7 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/api/profiles/reject")
-	public ResponseEntity<Void> getAPIProfilesFollow(@RequestParam("id") String otherProfileId, @PathVariable("follow") String followState, HttpSession session) {
+	public ResponseEntity<Void> getAPIProfilesReject(@RequestParam("id") String otherProfileId, HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
 		ResponseEntity<Void> response;
 
