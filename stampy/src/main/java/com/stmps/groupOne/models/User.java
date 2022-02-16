@@ -1,4 +1,5 @@
 package com.stmps.groupOne.models;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,7 +51,7 @@ public class User {
 	@JsonIgnore
 	private Profile profile;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(
 		  name = "user_has_roles", 
 		  joinColumns = @JoinColumn(name = "user_id"), 
@@ -168,6 +169,14 @@ public class User {
 		this.profile = profile;
 	}
 	public Set<Role> getRoles() {
+		Set<Role> roles;
+		
+		if(this.roles == null) {
+			roles = Collections.emptySet();
+		} else {
+			roles = this.roles;
+		}
+
 		return roles;
 	}
 	public void setRoles(Set<Role> roles) {
