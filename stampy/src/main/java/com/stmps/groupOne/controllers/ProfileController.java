@@ -76,10 +76,10 @@ public class ProfileController {
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
-	@GetMapping("/api/profiles/follows/amfollowing")
+	@GetMapping("/api/profiles/follows/followed")
 	public ResponseEntity<List<Profile>> getAPIProfilesFollowsAmfollowing(HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
-		List<Profile> results = profileServ.getFollowers(ownProfileId);
+		List<Profile> results = profileServ.getFollowed(ownProfileId);
 		
 		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
