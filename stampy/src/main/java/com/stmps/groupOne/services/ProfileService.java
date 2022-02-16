@@ -2,6 +2,7 @@ package com.stmps.groupOne.services;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.stmps.groupOne.models.FileEntry;
 import com.stmps.groupOne.models.Follow;
+import com.stmps.groupOne.models.FollowCompositeKey;
 import com.stmps.groupOne.models.Profile;
 import com.stmps.groupOne.repositories.FollowRepository;
 import com.stmps.groupOne.repositories.ProfileRepository;
@@ -44,11 +46,60 @@ public class ProfileService {
 		}
 	}
 	
+	public List<Profile> getFollowers(String ownProfileId) {
+		return profileRepo.findFollowers(ownProfileId);
+	}
+	
+	public List<Profile> getFollowed(String ownProfileId) {
+		return profileRepo.findFollowed(ownProfileId);
+	}
+	
+	public List<Profile> getFollowerRequests(String ownProfileId) {
+		return profileRepo.findFollowerRequests(ownProfileId);
+	}
+	
+	public Integer checkFollowStatus(String ownProfileId, String theirProfileId) {
+		FollowCompositeKey followKey = new FollowCompositeKey(ownProfileId, theirProfileId);
+		Optional<Follow> followOpt = followRepo.findById(followKey);
+		Integer status = 0;
+		
+		if(followOpt.isEmpty()) {
+			status = 0;
+		} else {
+			if(followOpt.get().getFollowVerified()) {
+				status = 2;
+			} else {
+				status = 1;
+			}
+		}
+
+		return status;
+	}
+	
+	public Boolean verifyFollowerRequest(Boolean grantFollow, String ownProfileId, String theirProfileId) {
+		FollowCompositeKey followKey = new FollowCompositeKey(theirProfileId, ownProfileId);
+		Optional<Follow> followOpt = followRepo.findById(followKey);
+		Boolean success = false;
+		
+		if(followOpt.isPresent()) {
+			Follow follow = followOpt.get();
+			if(grantFollow) {
+				follow.setFollowVerified(grantFollow);
+				followRepo.save(follow);
+			} else {
+				followRepo.delete(follow);
+			}
+			success = true;
+		}
+		
+		return success;
+	}
+	
 	public void follow(String ownProfileId, String otherProfileId) {
 		Profile ownProfile = this.getById(ownProfileId);
 		Profile otherProfile = this.getById(otherProfileId);
 
-		if (otherProfile.getUser().hasRole("private")) {
+		if (otherProfile.getIsPrivate()) {
 			followRepo.save(new Follow(ownProfile.getId(), otherProfile.getId(), false));
 		} else {
 			followRepo.save(new Follow(ownProfile.getId(), otherProfile.getId(), true));
@@ -58,9 +109,9 @@ public class ProfileService {
 	public void unfollow(String ownProfileId, String otherProfileId) {
 		Profile ownProfile = this.getById(ownProfileId);
 
-		for (Profile profile : ownProfile.getAmFollowing()) {
+		for (Profile profile : ownProfile.getFollowed()) {
 			if(profile.getId().equals(otherProfileId)) {
-				ownProfile.getAmFollowing().remove(profile);
+				ownProfile.getFollowed().remove(profile);
 				break;
 			}
 		}

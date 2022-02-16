@@ -28,25 +28,36 @@ public class PostController {
 	ProfileService profileServ;
 	
 	@GetMapping("/api/posts")
-	public ResponseEntity<List<Post>> getAPIPostUser(@RequestParam("id") String profileId) {
-		Profile profile = profileServ.getById(profileId);
+	public ResponseEntity<List<Post>> getAPIPostUser(@RequestParam("id") String theirProfileId, HttpSession session) {
+		String ownProfileId = (String) session.getAttribute("profile_id");
+		Profile profile = profileServ.getById(theirProfileId);
+		ResponseEntity<List<Post>> response;
 
 		if(profile != null) {
-			return ResponseEntity.ok().body(profile.getPosts());
+			switch (profileServ.checkFollowStatus(ownProfileId, theirProfileId)) {
+			case 0:
+			case 1:
+				response = ResponseEntity.status(403).build();
+				break;
+			case 2:
+				response = ResponseEntity.ok().body(profile.getPosts());
+				break;
+			default:
+				response = ResponseEntity.ok().body(Collections.emptyList());
+				break;
+			}
 		} else {
-			return ResponseEntity.notFound().build();
+			response = ResponseEntity.notFound().build();
 		}
+		
+		return response;
 	}
 	
 	@GetMapping("/api/posts/self")
 	public ResponseEntity<List<Post>> getAPIPostSelf(HttpSession session) {
 		Profile profile = profileServ.getById((String) session.getAttribute("profile_id"));
 
-		if(profile != null) {
-			return ResponseEntity.ok().body(profile.getPosts());
-		} else {
-			return ResponseEntity.ok().body(Collections.emptyList());
-		}
+		return ResponseEntity.ok().body(profile.getPosts());
 	}
 	
 	@PostMapping("/api/posts/new")
@@ -62,33 +73,44 @@ public class PostController {
 	
 	@GetMapping("/api/posts/public")
 	public ResponseEntity<List<Post>> getAPIPublic() {
-		List<Post> posts = postServ.getAll();
-		if(posts != null) {
-			return ResponseEntity.ok().body(posts);
-		} else {
-			return ResponseEntity.ok().body(Collections.emptyList());
-		}
+		return ResponseEntity.ok().body(postServ.getAllPublic());
 	}
 	
-	@GetMapping("/api/posts/following")
+	@GetMapping("/api/posts/followed")
 	public ResponseEntity<List<Post>> getAPIFollowing(HttpSession session){
 		String profileId = (String)session.getAttribute("profile_id");
-		List<Post> posts = postServ.getAllFollowing(profileId);
-		
-		if(posts != null) {
-			return ResponseEntity.ok().body(posts);
-		} else {
-			return ResponseEntity.ok().body(Collections.emptyList());
-		}
+
+		return ResponseEntity.ok().body( postServ.getAllFollowed(profileId));
 	}
 
 	@GetMapping("/api/posts/{postid}")
-	public ResponseEntity<Post> getAPIPost(@PathVariable("postid") String postId) {
+	public ResponseEntity<Post> getAPIPost(@PathVariable("postid") String postId, HttpSession session) {
+		String ownProfileId = (String) session.getAttribute("profile_id");
 		Post post = postServ.getById(postId);
+		ResponseEntity<Post> response;
+
 		if(post != null) {
-			return ResponseEntity.ok().body(post);
+			if(post.getProfile().getId().equals(ownProfileId)) {
+				response = ResponseEntity.ok().body(post);
+			} else {
+				String theirProfileId = post.getProfile().getId();
+				switch (profileServ.checkFollowStatus(ownProfileId, theirProfileId)) {
+				case 0:
+				case 1:
+					response = ResponseEntity.status(403).build();
+					break;
+				case 2:
+					response = ResponseEntity.ok().body(post);
+					break;
+				default:
+					response = ResponseEntity.notFound().build();
+					break;
+				}
+			}
 		} else {
-			return ResponseEntity.notFound().build();
+			response = ResponseEntity.notFound().build();
 		}
+
+		return response;
 	}
 }

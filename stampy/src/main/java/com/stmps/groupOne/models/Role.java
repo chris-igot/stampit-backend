@@ -1,5 +1,6 @@
 package com.stmps.groupOne.models;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -36,6 +37,14 @@ public class Role {
 	}
 
 	public Set<User> getUsers() {
+		Set<User> users;
+		
+		if(this.users == null) {
+			users = Collections.emptySet();
+		} else {
+			users = this.users;
+		}
+		
 		return users;
 	}
 

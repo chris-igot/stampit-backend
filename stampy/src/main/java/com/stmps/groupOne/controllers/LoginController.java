@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stmps.groupOne.models.Profile;
@@ -57,7 +56,7 @@ public class LoginController {
 			User newUser = usrServ.add(user);
 			newUser.addRole(roleServ.getRole("user"));
 			System.out.println("NAME"+user.getUsername());
-			Profile newProfile = profileServ.add(new Profile(user.getUsername(),"","",user));
+			Profile newProfile = profileServ.add(new Profile(user.getUsername(), "", "", user.getIsPrivate(), user));
 
 			session.setAttribute("email", user.getEmail());
 			session.setAttribute("id", newUser.getId());
@@ -93,7 +92,7 @@ public class LoginController {
 			User newUser = usrServ.add(user);
 			newUser.addRole(roleServ.getRole("admin-pending"));
 			System.out.println("NAME"+user.getUsername());
-			Profile newProfile = profileServ.add(new Profile(user.getUsername(),"","",user));
+			Profile newProfile = profileServ.add(new Profile(user.getUsername(), "", "", true, user));
 
 			session.setAttribute("email", user.getEmail());
 			session.setAttribute("id", newUser.getId());

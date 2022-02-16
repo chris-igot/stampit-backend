@@ -1,5 +1,6 @@
 package com.stmps.groupOne.models;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,7 @@ public class Profile {
 	private String title;
 	@Size(max = 250)
 	private String bio;
+	private Boolean isPrivate;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonSerialize(using = UserSerializer.class)
@@ -56,7 +58,7 @@ public class Profile {
 	@JsonIgnore
 	private List<Stamp> stamps;
 
-	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "followed",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonSerialize(using = FollowSerializer.class)
 	private Set<Profile> followers;
 	
@@ -66,12 +68,12 @@ public class Profile {
 		  joinColumns = @JoinColumn(name = "youId"), 
 		  inverseJoinColumns = @JoinColumn(name = "themId"))
 	@JsonSerialize(using = FollowSerializer.class)
-	private Set<Profile> amFollowing;
+	private Set<Profile> followed;
 	
 	@Transient
-	private Boolean currentlyFollowing;
+	private Integer currentlyFollowing;
 	@Transient
-	private Boolean isPrivate;
+	private Integer followRequested;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -79,10 +81,11 @@ public class Profile {
 		this.bio = bio;
 	}
 	
-	public Profile(String name, String title, String bio, User user) {
+	public Profile(String name, String title, String bio, Boolean isPrivate, User user) {
 		this.name = name;
 		this.title = title;
 		this.bio = bio;
+		this.isPrivate = isPrivate;
 		this.user = user;
 	}
 	
@@ -103,7 +106,7 @@ public class Profile {
 	}
 	
 	public Boolean beingFollowedBy(String other_id) {
-		for (Profile profile : this.followers) {
+		for (Profile profile : this.getFollowers()) {
 			if(profile.getId().equals(other_id)) {
 				return true;
 			}
@@ -112,7 +115,7 @@ public class Profile {
 	}
 	
 	public Boolean checkIfFollowing(String other_id) {
-		for (Profile profile : this.amFollowing) {
+		for (Profile profile : this.getFollowed()) {
 			if(profile.getId().equals(other_id)) {
 				return true;
 			}
@@ -120,23 +123,23 @@ public class Profile {
 		return false;
 	}
 	public Boolean checkIfFollowing(Profile otherProfile) {
-		return this.amFollowing.contains(otherProfile);
+		return this.followed.contains(otherProfile);
 	}
 	
 	public void follow(Profile otherProfile) {
-		this.amFollowing.add(otherProfile);
+		this.followed.add(otherProfile);
 	}
 	public void unfollow(String other_id) {
-		for (Profile profile : this.amFollowing) {
+		for (Profile profile : this.getFollowed()) {
 			if(profile.getId().equals(other_id)) {
-				this.amFollowing.remove(profile);
+				this.followed.remove(profile);
 				return;
 			}
 		}
 	}
 	public void unfollow(Profile otherProfile) {
 		if(checkIfFollowing(otherProfile.getId())) {
-			this.amFollowing.remove(otherProfile);
+			this.followed.remove(otherProfile);
 		}
 	}
 	
@@ -165,6 +168,14 @@ public class Profile {
 		this.bio = bio;
 	}
 	public List<Post> getPosts() {
+		List<Post> posts;
+
+		if(this.posts == null) {
+			posts = Collections.emptyList();
+		} else {
+			posts = this.posts;
+		}
+
 		return posts;
 	}
 	public void setPosts(List<Post> posts) {
@@ -189,16 +200,32 @@ public class Profile {
 		this.user = user;
 	}
 	public Set<Profile> getFollowers() {
+		Set<Profile> followers;
+
+		if(this.followers == null) {
+			followers = Collections.emptySet();
+		} else {
+			followers = this.followers;
+		}
+
 		return followers;
 	}
 	public void setFollowers(Set<Profile> followers) {
 		this.followers = followers;
 	}
-	public Set<Profile> getAmFollowing() {
-		return amFollowing;
+	public Set<Profile> getFollowed() {
+		Set<Profile> followed;
+
+		if(this.followed == null) {
+			followed = Collections.emptySet();
+		} else {
+			followed = this.followed;
+		}
+
+		return followed;
 	}
-	public void setAmFollowing(Set<Profile> amFollowing) {
-		this.amFollowing = amFollowing;
+	public void setFollowed(Set<Profile> followed) {
+		this.followed = followed;
 	}
 	public FileEntry getImage() {
 		return image;
@@ -207,18 +234,35 @@ public class Profile {
 		this.image = image;
 	}
 	public List<Stamp> getStamps() {
+		List<Stamp> stamps;
+
+		if(this.stamps == null) {
+			stamps = Collections.emptyList();
+		} else {
+			stamps = this.stamps;
+		}
+
 		return stamps;
 	}
 	public void setStamps(List<Stamp> stamps) {
 		this.stamps = stamps;
 	}
-	public Boolean getCurrentlyFollowing() {
+	public Integer getCurrentlyFollowing() {
 		return currentlyFollowing;
 	}
-	public void setCurrentlyFollowing(Boolean currentlyFollowing) {
+	public void setCurrentlyFollowing(Integer currentlyFollowing) {
 		this.currentlyFollowing = currentlyFollowing;
 	}
 	public Boolean getIsPrivate() {
-		return this.user.hasRole("private");
+		return isPrivate;
+	}
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+	public Integer getFollowRequested() {
+		return followRequested;
+	}
+	public void setFollowRequested(Integer followRequested) {
+		this.followRequested = followRequested;
 	}
 }

@@ -27,10 +27,10 @@ public class PostService {
 		post.setProfile(profile);
 		return postRepo.save(post);
 	}
-	public List<Post> getAll() {
-		return postRepo.findAllByOrderByCreatedAtDesc();
+	public List<Post> getAllPublic() {
+		return postRepo.findAllPublic();
 	}
-	public List<Post> getAllFollowing(String userId) {
+	public List<Post> getAllFollowed(String userId) {
 		return postRepo.findAllFollowed(userId);
 	}
 	public Post getById(String id) {

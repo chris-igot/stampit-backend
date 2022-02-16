@@ -2,7 +2,6 @@ package com.stmps.groupOne.controllers;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.stmps.groupOne.models.Profile;
-import com.stmps.groupOne.models.User;
 import com.stmps.groupOne.services.ProfileService;
 import com.stmps.groupOne.services.RoleService;
 import com.stmps.groupOne.services.UserService;
@@ -47,11 +44,12 @@ public class ProfileController {
 	
 	@GetMapping("/api/profiles")
 	public ResponseEntity<Profile> getAPIProfile(@RequestParam("id") String otherProfileId, HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
 		Profile otherProfile = profileServ.getById(otherProfileId);
-		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
 		
 		if(otherProfile != null) {
-			otherProfile.setCurrentlyFollowing(ownProfile.checkIfFollowing(otherProfile));
+			otherProfile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, otherProfileId));
+			otherProfile.setFollowRequested(profileServ.checkFollowStatus(otherProfileId, ownProfileId));
 			return ResponseEntity.ok().body(otherProfile);
 		} else {
 			return ResponseEntity.notFound().build();
@@ -61,20 +59,11 @@ public class ProfileController {
 	@PostMapping("/api/profiles/home/edit")
 	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
-		Long userId = (Long) session.getAttribute("id");
 		Profile dbProfile = profileServ.getById(profileId);
-		User user = usrServ.getById(userId);
-		
-		if(profileForm.getIsPrivate() == true) {
-			user.addRole(roleServ.getRole("private"));
-			usrServ.add(user);
-		} else {
-			user.removeRole("private");
-			usrServ.add(user);
-		}
-
+		System.out.println("isprivate:"+profileForm.getIsPrivate());
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
+		dbProfile.setIsPrivate(profileForm.getIsPrivate());
 		profileServ.add(dbProfile);
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
@@ -88,48 +77,103 @@ public class ProfileController {
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
-	@GetMapping("/api/profiles/ownfollows")
-	public ResponseEntity<Set<Profile>> getAPIprofileList(Model model, HttpSession session) {
-		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
-		Set<Profile> results = ownProfile.getAmFollowing();
+	@GetMapping("/api/profiles/follows/followed")
+	public ResponseEntity<List<Profile>> getAPIProfilesFollowsAmfollowing(HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+		List<Profile> results = profileServ.getFollowed(ownProfileId);
 		
-		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
-			profile.setCurrentlyFollowing(ownProfile.checkIfFollowing(profile));
+			profile.setCurrentlyFollowing(2);
+			profile.setFollowRequested(profileServ.checkFollowStatus(profile.getId(), ownProfileId));
+		}
+		
+		return ResponseEntity.ok().body(results);
+	}
+	
+	@GetMapping("/api/profiles/follows/followers")
+	public ResponseEntity<List<Profile>> getAPIProfilesFollowsFollowers(HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+		List<Profile> results = profileServ.getFollowers(ownProfileId);
+		
+		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
+			Profile profile = (Profile) iterator.next();
+			profile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, profile.getId()));
+			profile.setFollowRequested(2);
+		}
+		
+		return ResponseEntity.ok().body(results);
+	}
+	
+	@GetMapping("/api/profiles/follows/requested")
+	public ResponseEntity<List<Profile>> getAPIProfilesFollowsRequested(HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+		List<Profile> results = profileServ.getFollowerRequests(ownProfileId);
+		
+		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
+			Profile profile = (Profile) iterator.next();
+			profile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, profile.getId()));
+			profile.setFollowRequested(1);
 		}
 		
 		return ResponseEntity.ok().body(results);
 	}
 
-	
-	@GetMapping("/api/profiles/follows/amfollowing")
-	public ResponseEntity<Boolean> getAPIprofileAmfollowing(@RequestParam("id") String otherProfileId, HttpSession session) {
-		Boolean amFollowing = profileServ.getById((String)session.getAttribute("profile_id")).checkIfFollowing(otherProfileId);
-		
-		return ResponseEntity.ok().body(amFollowing);
-	}
-	
-	@GetMapping("/api/profiles/{follow}")
-	public ResponseEntity<Void> getAPIProfileFollow(@RequestParam("id") String otherProfileId, @PathVariable("follow") String followState, HttpSession session) {
+	@GetMapping("/api/profiles/follow")
+	public ResponseEntity<Void> getAPIProfilesFollow(@RequestParam("id") String otherProfileId, HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
 
-		if(followState.equals("unfollow")) {
-			profileServ.unfollow(ownProfileId, otherProfileId);
-		} else if(followState.equals("follow")) {
-			profileServ.follow(ownProfileId, otherProfileId);
-		}
+		profileServ.follow(ownProfileId, otherProfileId);
 
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
+	@GetMapping("/api/profiles/unfollow")
+	public ResponseEntity<Void> getAPIProfilesUnfollow(@RequestParam("id") String otherProfileId, HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+
+		profileServ.unfollow(ownProfileId, otherProfileId);
+		
+		return new ResponseEntity<Void>( HttpStatus.OK );
+	}
+	
+	@GetMapping("/api/profiles/accept")
+	public ResponseEntity<Void> getAPIProfilesAccept(@RequestParam("id") String otherProfileId, HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+		ResponseEntity<Void> response;
+
+		if(profileServ.verifyFollowerRequest(true, ownProfileId, otherProfileId)) {
+			response = new ResponseEntity<Void>( HttpStatus.OK );
+		} else {
+			response = new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
+		}
+
+		return response;
+	}
+	
+	@GetMapping("/api/profiles/reject")
+	public ResponseEntity<Void> getAPIProfilesReject(@RequestParam("id") String otherProfileId, HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+		ResponseEntity<Void> response;
+
+		if(profileServ.verifyFollowerRequest(false, ownProfileId, otherProfileId)) {
+			response = new ResponseEntity<Void>( HttpStatus.OK );
+		} else {
+			response = new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
+		}
+
+		return response;
+	}
+	
 	@PostMapping("/api/profiles/search")
 	public ResponseEntity<List<Profile>> postAPISearch(@RequestParam("search") String searchString, HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
 		List<Profile> results = profileServ.findName(searchString);
-		Profile ownProfile = profileServ.getById((String)session.getAttribute("profile_id"));
 		
-		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
-			profile.setCurrentlyFollowing(ownProfile.checkIfFollowing(profile));
+			profile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, profile.getId()));
+			profile.setFollowRequested(profileServ.checkFollowStatus(profile.getId(), ownProfileId));
 		}
 
 		return ResponseEntity.ok().body(results);

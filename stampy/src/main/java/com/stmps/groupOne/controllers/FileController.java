@@ -1,8 +1,5 @@
 package com.stmps.groupOne.controllers;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -60,13 +57,13 @@ public class FileController {
 //	}
 	
 	@PostMapping("/api/admin/image/new")
-	public String postImageNew(
+	public ResponseEntity<Void> postImageNew(
 			@RequestParam("file") MultipartFile uploadedFile,
 			@RequestParam("name") String name,
-			@RequestParam("name") String category
+			@RequestParam("category") String category
 		) {
 		fileServ.addImage(uploadedFile, category, name);
-		return "redirect:/image/new";
+		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
 	@PostMapping("/api/admin/stamps/multiplenew")
@@ -81,19 +78,6 @@ public class FileController {
 
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
-
-//	@PostMapping("/upload")
-//	public String handleFileUpload(@RequestParam("file") MultipartFile uploadedFile,
-//			RedirectAttributes redirectAttributes) {
-//		System.out.println("UPLOAD - POST");
-//
-//		fileServ.addImage(uploadedFile,"post");
-//		
-//		redirectAttributes.addFlashAttribute("message",
-//				"You successfully uploaded " + uploadedFile.getOriginalFilename() + "!");
-//
-//		return "redirect:/profile";
-//	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
