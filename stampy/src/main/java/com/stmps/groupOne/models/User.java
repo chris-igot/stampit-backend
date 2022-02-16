@@ -9,7 +9,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -23,6 +22,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stmps.groupOne.utilities.serialization.RoleSerializer;
@@ -31,8 +32,10 @@ import com.stmps.groupOne.utilities.serialization.RoleSerializer;
 @Table(name = "users")
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "id-generator")
+	@GenericGenerator(name = "id-generator",
+    strategy = "com.stmps.groupOne.utilities.generators.UrlSafeIdGenerator")
+	private String id;
 	@Size(min = 2, message = "Name must have at least 2 characters")
 	private String username;
 	@Email(message = "Email must be valid")
@@ -120,10 +123,10 @@ public class User {
 		return output;
 	}
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getUsername() {
