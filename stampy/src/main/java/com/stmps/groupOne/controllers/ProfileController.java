@@ -49,6 +49,7 @@ public class ProfileController {
 		
 		if(otherProfile != null) {
 			otherProfile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, otherProfileId));
+			otherProfile.setFollowRequested(profileServ.checkFollowStatus(otherProfileId, ownProfileId));
 			return ResponseEntity.ok().body(otherProfile);
 		} else {
 			return ResponseEntity.notFound().build();
@@ -84,6 +85,7 @@ public class ProfileController {
 		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
 			profile.setCurrentlyFollowing(2);
+			profile.setFollowRequested(profileServ.checkFollowStatus(profile.getId(), ownProfileId));
 		}
 		
 		return ResponseEntity.ok().body(results);
@@ -97,6 +99,7 @@ public class ProfileController {
 		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
 			profile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, profile.getId()));
+			profile.setFollowRequested(2);
 		}
 		
 		return ResponseEntity.ok().body(results);
@@ -110,6 +113,7 @@ public class ProfileController {
 		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
 			profile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, profile.getId()));
+			profile.setFollowRequested(1);
 		}
 		
 		return ResponseEntity.ok().body(results);
@@ -169,6 +173,7 @@ public class ProfileController {
 		for (Iterator<Profile> iterator = results.iterator(); iterator.hasNext();) {
 			Profile profile = (Profile) iterator.next();
 			profile.setCurrentlyFollowing(profileServ.checkFollowStatus(ownProfileId, profile.getId()));
+			profile.setFollowRequested(profileServ.checkFollowStatus(profile.getId(), ownProfileId));
 		}
 
 		return ResponseEntity.ok().body(results);

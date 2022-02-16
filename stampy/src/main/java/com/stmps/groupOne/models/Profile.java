@@ -72,6 +72,8 @@ public class Profile {
 	
 	@Transient
 	private Integer currentlyFollowing;
+	@Transient
+	private Integer followRequested;
 	
 	public Profile() {}
 	public Profile(String title, String bio) {
@@ -256,5 +258,11 @@ public class Profile {
 	}
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
-	}	
+	}
+	public Integer getFollowRequested() {
+		return followRequested;
+	}
+	public void setFollowRequested(Integer followRequested) {
+		this.followRequested = followRequested;
+	}
 }
