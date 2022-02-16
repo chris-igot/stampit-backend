@@ -58,7 +58,7 @@ public class Profile {
 	@JsonIgnore
 	private List<Stamp> stamps;
 
-	@ManyToMany(mappedBy = "amFollowing",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "followed",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonSerialize(using = FollowSerializer.class)
 	private Set<Profile> followers;
 	
@@ -68,7 +68,7 @@ public class Profile {
 		  joinColumns = @JoinColumn(name = "youId"), 
 		  inverseJoinColumns = @JoinColumn(name = "themId"))
 	@JsonSerialize(using = FollowSerializer.class)
-	private Set<Profile> amFollowing;
+	private Set<Profile> followed;
 	
 	@Transient
 	private Integer currentlyFollowing;
@@ -113,7 +113,7 @@ public class Profile {
 	}
 	
 	public Boolean checkIfFollowing(String other_id) {
-		for (Profile profile : this.getAmFollowing()) {
+		for (Profile profile : this.getFollowed()) {
 			if(profile.getId().equals(other_id)) {
 				return true;
 			}
@@ -121,23 +121,23 @@ public class Profile {
 		return false;
 	}
 	public Boolean checkIfFollowing(Profile otherProfile) {
-		return this.amFollowing.contains(otherProfile);
+		return this.followed.contains(otherProfile);
 	}
 	
 	public void follow(Profile otherProfile) {
-		this.amFollowing.add(otherProfile);
+		this.followed.add(otherProfile);
 	}
 	public void unfollow(String other_id) {
-		for (Profile profile : this.getAmFollowing()) {
+		for (Profile profile : this.getFollowed()) {
 			if(profile.getId().equals(other_id)) {
-				this.amFollowing.remove(profile);
+				this.followed.remove(profile);
 				return;
 			}
 		}
 	}
 	public void unfollow(Profile otherProfile) {
 		if(checkIfFollowing(otherProfile.getId())) {
-			this.amFollowing.remove(otherProfile);
+			this.followed.remove(otherProfile);
 		}
 	}
 	
@@ -211,19 +211,19 @@ public class Profile {
 	public void setFollowers(Set<Profile> followers) {
 		this.followers = followers;
 	}
-	public Set<Profile> getAmFollowing() {
-		Set<Profile> amFollowing;
+	public Set<Profile> getFollowed() {
+		Set<Profile> followed;
 
-		if(this.amFollowing == null) {
-			amFollowing = Collections.emptySet();
+		if(this.followed == null) {
+			followed = Collections.emptySet();
 		} else {
-			amFollowing = this.amFollowing;
+			followed = this.followed;
 		}
 
-		return amFollowing;
+		return followed;
 	}
-	public void setAmFollowing(Set<Profile> amFollowing) {
-		this.amFollowing = amFollowing;
+	public void setFollowed(Set<Profile> followed) {
+		this.followed = followed;
 	}
 	public FileEntry getImage() {
 		return image;

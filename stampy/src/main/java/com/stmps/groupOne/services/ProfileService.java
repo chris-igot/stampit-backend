@@ -109,9 +109,9 @@ public class ProfileService {
 	public void unfollow(String ownProfileId, String otherProfileId) {
 		Profile ownProfile = this.getById(ownProfileId);
 
-		for (Profile profile : ownProfile.getAmFollowing()) {
+		for (Profile profile : ownProfile.getFollowed()) {
 			if(profile.getId().equals(otherProfileId)) {
-				ownProfile.getAmFollowing().remove(profile);
+				ownProfile.getFollowed().remove(profile);
 				break;
 			}
 		}
