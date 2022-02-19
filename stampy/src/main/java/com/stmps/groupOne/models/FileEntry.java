@@ -48,7 +48,7 @@ public class FileEntry {
 		this.type = type;
 		this.category = usage;
 	}
-	
+
 	public FileEntry(String id, String fileName, String path, String type, String usage) {
 		this.id = id;
 		this.fileName = fileName;

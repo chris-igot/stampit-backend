@@ -90,4 +90,13 @@ public class JointFileService {
 			return null;
 		}
 	}
+	
+	public FileEntry getFileEntry(String fileName, String category) {
+		List<FileEntry> fileEntries = fileEntryRepo.findByFileNameAndTypeStartingWith(fileName, category);
+		if(fileEntries.size() > 0) {
+			return fileEntries.get(0);
+		} else {
+			return null;
+		}
+	}
 }

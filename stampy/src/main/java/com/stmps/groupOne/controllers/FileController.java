@@ -1,5 +1,7 @@
 package com.stmps.groupOne.controllers;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.stmps.groupOne.models.FileEntry;
+import com.stmps.groupOne.models.Profile;
 import com.stmps.groupOne.services.JointFileService;
 import com.stmps.groupOne.storage.StorageFileNotFoundException;
 
@@ -21,22 +25,38 @@ import com.stmps.groupOne.storage.StorageFileNotFoundException;
 public class FileController {
 	@Autowired
 	JointFileService fileServ;
-//	
-//	@GetMapping("/upload")
-//	public String listUploadedFiles() {
-//		return "stampyReact.jsp";
-//	}
 
 	@GetMapping("/image/{filename:.+}")
 	@ResponseBody
-	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-		Resource file = fileServ.getImage(filename);
-		if(file != null) {
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	public ResponseEntity<Resource> serveFile(@PathVariable String filename, HttpSession session) {
+		String ownProfileId = (String)session.getAttribute("profile_id");
+		FileEntry fileEntry = fileServ.getFileEntry(filename, "image");
+		ResponseEntity<Resource> output;
+
+		if(fileEntry != null) {
+			Resource file = null;
+			Profile postOwner = fileEntry.getPost().getProfile();
+
+			if (
+				postOwner.beingFollowedBy(ownProfileId) ||
+				postOwner.getId().equals(ownProfileId)
+			) {
+				file = fileServ.getImage(filename);
+
+				if(file == null) {
+					output = ResponseEntity.notFound().build();
+				} else {
+					output = ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+							"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+				}
+			} else {
+				output = ResponseEntity.status(403).build();
+			}
 		} else {
-			return ResponseEntity.notFound().build();
+			output = ResponseEntity.notFound().build();
 		}
+		
+		return output;
 	}
 	
 	@GetMapping("/stamp/{filename:.+}")
@@ -50,11 +70,6 @@ public class FileController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-//	@GetMapping("/image/new")
-//	public String getImageNew() {
-//		return "uploadImage.jsp";
-//	}
 	
 	@PostMapping("/api/admin/image/new")
 	public ResponseEntity<Void> postImageNew(
