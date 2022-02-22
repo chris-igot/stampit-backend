@@ -25,7 +25,7 @@ public class UserService {
 		return this.userRepo.findAll();
 	}
 	
-	public User getById(Long id) {
+	public User getById(String id) {
 		Optional<User> optUser = this.userRepo.findById(id);
 		
 		if(optUser.isPresent()) {
