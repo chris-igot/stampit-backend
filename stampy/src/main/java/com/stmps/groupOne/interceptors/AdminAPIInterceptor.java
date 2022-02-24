@@ -18,7 +18,7 @@ public class AdminAPIInterceptor implements HandlerInterceptor {
 	UserService userServ;
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-		Long userId = (Long) request.getSession().getAttribute("id");
+		String userId = (String) request.getSession().getAttribute("id");
 //		String profileId = (String) request.getSession().getAttribute("profile_id");
 		System.out.println("check for admin!!");
 		if(userId == null) {
