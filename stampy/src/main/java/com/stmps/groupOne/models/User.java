@@ -36,12 +36,13 @@ public class User {
 	@GenericGenerator(name = "id-generator",
     strategy = "com.stmps.groupOne.utilities.generators.UrlSafeIdGenerator")
 	private String id;
-	@Size(min = 2, message = "Name must have at least 2 characters")
+	@Size(min = 2, max = 32, message = "Username must be between 2 and 32 characters")
 	private String username;
 	@Email(message = "Email must be valid")
 	@NotBlank
+	@Size(max = 100)
 	private String email;
-	@Size(min = 8, message = "Password must at least be 8 characters!")
+	@Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters!")
 	@JsonIgnore
 	private String password;
 	@Transient
