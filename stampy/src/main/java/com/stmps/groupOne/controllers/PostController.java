@@ -34,17 +34,21 @@ public class PostController {
 		ResponseEntity<List<Post>> response;
 
 		if(profile != null) {
-			switch (profileServ.checkFollowStatus(ownProfileId, theirProfileId)) {
-			case 0:
-			case 1:
-				response = ResponseEntity.status(403).build();
-				break;
-			case 2:
+			if(!profile.getIsPrivate()) {
 				response = ResponseEntity.ok().body(profile.getPosts());
-				break;
-			default:
-				response = ResponseEntity.ok().body(Collections.emptyList());
-				break;
+			} else {
+				switch (profileServ.checkFollowStatus(ownProfileId, theirProfileId)) {
+				case 0:
+				case 1:
+					response = ResponseEntity.status(403).build();
+					break;
+				case 2:
+					response = ResponseEntity.ok().body(profile.getPosts());
+					break;
+				default:
+					response = ResponseEntity.ok().body(Collections.emptyList());
+					break;
+				}
 			}
 		} else {
 			response = ResponseEntity.notFound().build();
@@ -90,7 +94,7 @@ public class PostController {
 		ResponseEntity<Post> response;
 
 		if(post != null) {
-			if(post.getProfile().getId().equals(ownProfileId)) {
+			if(post.getProfile().getId().equals(ownProfileId) || !post.getProfile().getIsPrivate()) {
 				response = ResponseEntity.ok().body(post);
 			} else {
 				String theirProfileId = post.getProfile().getId();
