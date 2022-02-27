@@ -37,6 +37,7 @@ public class Profile {
 	@GenericGenerator(name = "id-generator",
     strategy = "com.stmps.groupOne.utilities.generators.UrlSafeIdGenerator")
 	private String id;
+	@Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters")
 	private String name;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id", referencedColumnName = "id")

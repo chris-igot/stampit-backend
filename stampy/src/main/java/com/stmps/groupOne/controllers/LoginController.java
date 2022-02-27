@@ -67,6 +67,19 @@ public class LoginController {
 		}
 	}
 	
+	@GetMapping("/api/login/check")
+	public ResponseEntity<Void> getAPILoginCheck(HttpSession session){
+		ResponseEntity<Void> output;
+
+		if((String) session.getAttribute("id") != null) {
+			output = new ResponseEntity<Void>( HttpStatus.OK );
+		} else {
+			output = new ResponseEntity<Void>( HttpStatus.UNAUTHORIZED );
+		}
+		
+		return output;
+	}
+	
 	@PostMapping("/api/admin/login")
 	public ResponseEntity<Void> postAPIAdminLogin(@ModelAttribute("loginForm") User userForm, HttpSession session) {
 		if(usrServ.authenticateUser(userForm.getEmail(), userForm.getPassword())) {

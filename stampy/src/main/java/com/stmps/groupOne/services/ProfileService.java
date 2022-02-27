@@ -29,7 +29,7 @@ public class ProfileService {
 	}
 	
 	public void addImage(MultipartFile uploadedFile, Profile profile) {
-		FileEntry image = fileServ.addImage(uploadedFile, "image");
+		FileEntry image = fileServ.addImage(uploadedFile, "profilepic");
 		profile.setImage(image);
 		profileRepo.save(profile);
 	}

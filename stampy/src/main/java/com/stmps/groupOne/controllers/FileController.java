@@ -28,7 +28,7 @@ public class FileController {
 
 	@GetMapping("/image/{filename:.+}")
 	@ResponseBody
-	public ResponseEntity<Resource> serveFile(@PathVariable String filename, HttpSession session) {
+	public ResponseEntity<Resource> servePostImage(@PathVariable String filename, HttpSession session) {
 		String ownProfileId = (String)session.getAttribute("profile_id");
 		FileEntry fileEntry = fileServ.getFileEntry(filename, "image");
 		ResponseEntity<Resource> output;
@@ -39,7 +39,8 @@ public class FileController {
 
 			if (
 				postOwner.beingFollowedBy(ownProfileId) ||
-				postOwner.getId().equals(ownProfileId)
+				postOwner.getId().equals(ownProfileId) ||
+				!postOwner.getIsPrivate()
 			) {
 				file = fileServ.getImage(filename);
 
@@ -62,6 +63,18 @@ public class FileController {
 	@GetMapping("/stamp/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> serveStamp(@PathVariable String filename) {
+		Resource file = fileServ.getImage(filename);
+		if(file != null) {
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping("/profilepic/{filename:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> serveProfilePic(@PathVariable String filename) {
 		Resource file = fileServ.getImage(filename);
 		if(file != null) {
 			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
