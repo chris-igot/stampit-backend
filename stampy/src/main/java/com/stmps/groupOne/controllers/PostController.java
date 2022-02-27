@@ -30,12 +30,12 @@ public class PostController {
 	@GetMapping("/api/posts")
 	public ResponseEntity<List<Post>> getAPIPostUser(@RequestParam("id") String theirProfileId, HttpSession session) {
 		String ownProfileId = (String) session.getAttribute("profile_id");
-		Profile profile = profileServ.getById(theirProfileId);
+		Profile theirProfile = profileServ.getById(theirProfileId);
 		ResponseEntity<List<Post>> response;
 
-		if(profile != null) {
-			if(!profile.getIsPrivate()) {
-				response = ResponseEntity.ok().body(profile.getPosts());
+		if(theirProfile != null) {
+			if(!theirProfile.getIsPrivate()) {
+				response = ResponseEntity.ok().body(postServ.getProfilePosts(theirProfileId));
 			} else {
 				switch (profileServ.checkFollowStatus(ownProfileId, theirProfileId)) {
 				case 0:
@@ -43,7 +43,7 @@ public class PostController {
 					response = ResponseEntity.status(403).build();
 					break;
 				case 2:
-					response = ResponseEntity.ok().body(profile.getPosts());
+					response = ResponseEntity.ok().body(postServ.getProfilePosts(theirProfileId));
 					break;
 				default:
 					response = ResponseEntity.ok().body(Collections.emptyList());

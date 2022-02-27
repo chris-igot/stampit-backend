@@ -18,6 +18,7 @@ public class PostService {
 	PostRepository postRepo;
 	@Autowired
 	JointFileService fileServ;
+
 	public Post addImagePost(MultipartFile uploadedFile, String description, Profile profile) {
 		Post post = new Post();
 		FileEntry image = fileServ.addImage(uploadedFile, "image");
@@ -27,12 +28,19 @@ public class PostService {
 		post.setProfile(profile);
 		return postRepo.save(post);
 	}
+
 	public List<Post> getAllPublic() {
 		return postRepo.findAllPublic();
 	}
-	public List<Post> getAllFollowed(String userId) {
-		return postRepo.findAllFollowed(userId);
+
+	public List<Post> getAllFollowed(String profileId) {
+		return postRepo.findAllFollowed(profileId);
 	}
+
+	public List<Post> getProfilePosts(String profileId) {
+		return postRepo.findByProfileIdEqualsOrderByCreatedAtDesc(profileId);
+	}
+
 	public Post getById(String id) {
 		Optional<Post> optPost = postRepo.findById(id);
 		if(optPost.isPresent()) {
