@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -44,6 +45,9 @@ public class Post {
 	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Stamp> stamps;
+	
+	@Transient
+	private String profileName;
 	
 	private Date createdAt;
 	private Date updatedAt;
@@ -107,5 +111,11 @@ public class Post {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}	
+	}
+	public String getProfileName() {
+		return this.profile.getName();
+	}
+	public void setProfileName(String profileName) {
+		this.profileName = profileName;
+	}
 }
