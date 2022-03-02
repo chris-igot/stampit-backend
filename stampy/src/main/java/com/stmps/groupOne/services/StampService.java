@@ -31,4 +31,8 @@ public class StampService {
 	public List<Stamp> getPostStamps(String postId) {
 		return stampRepo.findStampsByPost(postId);
 	}
+	
+	public void removePostStamps(List<Stamp> stamps) {
+		stampRepo.deleteAll(stamps);
+	}
 }

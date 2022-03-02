@@ -19,6 +19,7 @@ import com.stmps.groupOne.models.Post;
 import com.stmps.groupOne.models.Profile;
 import com.stmps.groupOne.services.PostService;
 import com.stmps.groupOne.services.ProfileService;
+import com.stmps.groupOne.services.StampService;
 
 @Controller
 public class PostController {
@@ -26,6 +27,8 @@ public class PostController {
 	PostService postServ;
 	@Autowired
 	ProfileService profileServ;
+	@Autowired
+	StampService stampServ;
 	
 	@GetMapping("/api/posts")
 	public ResponseEntity<List<Post>> getAPIPostUser(@RequestParam("id") String theirProfileId, HttpSession session) {
@@ -128,8 +131,10 @@ public class PostController {
 			response = new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
 		} else {
 			if(post.getProfile().getId().equals(ownProfileId)) {
+				if(post.getStamps().size() > 0) {
+					stampServ.removePostStamps(post.getStamps());
+				}
 				postServ.removeById(post);
-				System.out.println("removed!");
 				response = new ResponseEntity<Void>( HttpStatus.OK );
 			} else {
 				response = new ResponseEntity<Void>( HttpStatus.FORBIDDEN );
