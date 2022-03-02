@@ -117,4 +117,25 @@ public class PostController {
 
 		return response;
 	}
+	
+	@GetMapping("/api/posts/{postid}/remove")
+	public ResponseEntity<Void> deleteAPIPost(@PathVariable("postid") String postId, HttpSession session) {
+		String ownProfileId = (String) session.getAttribute("profile_id");
+		Post post = postServ.getById(postId);
+		ResponseEntity<Void> response;
+		System.out.println("post remove here ");
+		if(post == null) {
+			response = new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
+		} else {
+			if(post.getProfile().getId().equals(ownProfileId)) {
+				postServ.removeById(post);
+				System.out.println("removed!");
+				response = new ResponseEntity<Void>( HttpStatus.OK );
+			} else {
+				response = new ResponseEntity<Void>( HttpStatus.FORBIDDEN );
+			}
+		}
+
+		return response;
+	}
 }

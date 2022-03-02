@@ -46,7 +46,11 @@ public class PostService {
 		if(optPost.isPresent()) {
 			return optPost.get();
 		} else {
-			return new Post();
+			return null;
 		}
+	}
+	
+	public void removeById(Post post) {
+		postRepo.delete(post);
 	}
 }
