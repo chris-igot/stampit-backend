@@ -1,4 +1,4 @@
-# stampy
+# stampIt
 
 ## Description
 
