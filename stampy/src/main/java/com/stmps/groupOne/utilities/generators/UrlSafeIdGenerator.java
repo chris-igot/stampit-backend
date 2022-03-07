@@ -23,8 +23,6 @@ public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
 
 	@Override
 	public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

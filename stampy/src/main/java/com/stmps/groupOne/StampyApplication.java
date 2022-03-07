@@ -23,7 +23,6 @@ public class StampyApplication {
 	@Bean
 	CommandLineRunner init(StorageService storageService, StampyConfiguration stmpdConf) {
 		return (args) -> {
-//			storageService.deleteAll();
 			storageService.init();
 			stmpdConf.init();
 		};

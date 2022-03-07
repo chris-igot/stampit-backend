@@ -35,12 +35,10 @@ public class Stamp {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	@JsonIgnore
-	//Serialize this to profile_id
 	private Profile profile;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
 	@JsonIgnore
-	//Serialize this to post_id
 	private Post post;
 	
 	private Date createdAt;

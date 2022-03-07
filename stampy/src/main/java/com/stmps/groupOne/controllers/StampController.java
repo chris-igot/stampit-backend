@@ -61,10 +61,8 @@ public class StampController {
 	}
 	
 	@GetMapping("/api/stamps/all")
-//	public List<FileEntry> getAPIStampsAll() {
 	public ResponseEntity<List<FileEntry>> getAPIStampsAll() {
 		return ResponseEntity.ok().body(stampServ.getAllStamps());
-//		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
 	
 	@GetMapping("/api/stamps")
@@ -73,16 +71,6 @@ public class StampController {
 
 		return ResponseEntity.ok().body(stamps);
 	}
-	
-//	@PostMapping("/post/stamp")
-//	public ResponseEntity<Void> postPostStampHere(
-//			@RequestParam("x") Float x,@RequestParam("y") Float y,
-//			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
-//			@RequestParam("postId") String postId,
-//			HttpSession session
-//		) {
-//		return postAPIPostStampHere(x, y, boxDimX, boxDimY, postId, session);
-//	}
 
 	@PostMapping("/api/stamps/new")
 	public ResponseEntity<Void> postAPIPostStampHere(

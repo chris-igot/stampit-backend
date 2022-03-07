@@ -13,8 +13,6 @@ public class LoginAPIInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 		String userId = (String) request.getSession().getAttribute("id");
-//		String profileId = (String) request.getSession().getAttribute("profile_id");
-
 		if(userId == null) {
 			response.sendError(401);
 			return false;

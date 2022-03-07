@@ -19,10 +19,7 @@ public class AdminAPIInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 		String userId = (String) request.getSession().getAttribute("id");
-//		String profileId = (String) request.getSession().getAttribute("profile_id");
-		System.out.println("check for admin!!");
 		if(userId == null) {
-			System.out.println("not logged in!!");
 			response.sendError(401);
 			return false;
 		} else {
@@ -32,13 +29,10 @@ public class AdminAPIInterceptor implements HandlerInterceptor {
 				response.sendError(418);
 				return false;
 			} else {
-				System.out.println("logged in!!"+user.getRoles().size());
 				if(user.hasRole("admin")) {
 					return true;
 				} else {
 					System.out.println(user.getUsername());
-//					System.out.println(user.getRoles().toString());
-					System.out.println("not an admin!!");
 					response.sendError(403);
 					return false;
 				}
