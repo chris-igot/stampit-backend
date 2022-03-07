@@ -42,7 +42,6 @@ public class UrlSafeIdGenerator implements IdentifierGenerator, Configurable {
         		query = String.format(queryTemplate, newId);
         		resultSize = session.createSQLQuery(query).list().size();
         	} else {
-        		System.out.println(newId);
         		return newId;
         	}
 			

@@ -126,7 +126,7 @@ public class PostController {
 		String ownProfileId = (String) session.getAttribute("profile_id");
 		Post post = postServ.getById(postId);
 		ResponseEntity<Void> response;
-		System.out.println("post remove here ");
+
 		if(post == null) {
 			response = new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
 		} else {

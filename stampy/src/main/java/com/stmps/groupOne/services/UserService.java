@@ -43,14 +43,11 @@ public class UserService {
 		User user = userRepo.findByEmail(email);
 		
 		if(user == null) {
-			System.out.println("user dne");
 			return false;
 		} else {
 			if(BCrypt.checkpw(password, user.getPassword())) {
-				System.out.println("authenticated!");
 				return true;
 			} else {
-				System.out.println("not authenticated!");
 				return false;
 			}
 		}

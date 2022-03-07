@@ -59,7 +59,7 @@ public class ProfileController {
 	public ResponseEntity<Void> postAPIProfileEdit (@ModelAttribute("editProfileForm") Profile profileForm, HttpSession session) {
 		String profileId = (String) session.getAttribute("profile_id");
 		Profile dbProfile = profileServ.getById(profileId);
-		System.out.println("isprivate:"+profileForm.getIsPrivate());
+
 		dbProfile.setBio(profileForm.getBio());
 		dbProfile.setTitle(profileForm.getTitle());
 		dbProfile.setIsPrivate(profileForm.getIsPrivate());

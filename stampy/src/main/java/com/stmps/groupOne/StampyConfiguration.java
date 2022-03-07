@@ -18,7 +18,6 @@ public class StampyConfiguration {
 	UserService userServ;
 	
 	public void init() {
-		System.out.println("SIZE: "+userServ.getAll().size());
 		if(userServ.getAll().size() == 0) {
 			String adminName = "admin";
 			String adminEmail= "admin@stmpd.com";

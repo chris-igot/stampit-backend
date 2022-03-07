@@ -31,35 +31,7 @@ public class StampController {
 	StampService stampServ;
 	@Autowired
 	JointFileService fileServ;
-	
-	@PostMapping("/click")
-	public ResponseEntity<Void> getClickyWithIt(
-			@RequestParam("x") Float x,@RequestParam("y") Float y,
-			@RequestParam("boxDimX") Float boxDimX, @RequestParam("boxDimY") Float boxDimY,
-			@RequestParam("postId") String postId,
-			@RequestParam("stampId") String stampId,
-			HttpSession session
-			) {
-		System.out.println("\n\nClick!");
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println("Click!boxsize");
-		System.out.println(boxDimX);
-		System.out.println(boxDimY);
-		Float scaledX = (x / boxDimX) * 10000;
-		Float scaledY = (y / boxDimY) * 10000;
-		Integer relX = scaledX.intValue();
-		Integer relY = scaledY.intValue();
-		System.out.println("Click!relativepos");
-		System.out.println(relX);
-		System.out.println(relY);
-		System.out.println(postId);
-		System.out.println(stampId);
-		
-		return new ResponseEntity<Void>( HttpStatus.OK );
 
-	}
-	
 	@GetMapping("/api/stamps/all")
 	public ResponseEntity<List<FileEntry>> getAPIStampsAll() {
 		return ResponseEntity.ok().body(stampServ.getAllStamps());

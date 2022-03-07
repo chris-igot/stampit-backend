@@ -32,7 +32,6 @@ public class AdminAPIInterceptor implements HandlerInterceptor {
 				if(user.hasRole("admin")) {
 					return true;
 				} else {
-					System.out.println(user.getUsername());
 					response.sendError(403);
 					return false;
 				}

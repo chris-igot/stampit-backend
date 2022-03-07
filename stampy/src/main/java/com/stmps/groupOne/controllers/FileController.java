@@ -98,7 +98,6 @@ public class FileController {
 	public ResponseEntity<Void> postStampsMultipleNew(
 			@RequestParam("files") MultipartFile[] uploadedFiles
 			) {
-		System.out.println("filecount"+uploadedFiles.length);
 		for (int i = 0; i < uploadedFiles.length; i++) {
 			MultipartFile file = uploadedFiles[i];
 			fileServ.addImage(file, "stamp", file.getOriginalFilename().split("[.]")[0]);
