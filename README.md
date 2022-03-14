@@ -1,5 +1,5 @@
 # stampIt
 
-## Description
+This is the stampIt backend
 
-Instagram clone with stamp functionality
+[click here](https://github.com/cigot/stampit-frontend) for the frontend
