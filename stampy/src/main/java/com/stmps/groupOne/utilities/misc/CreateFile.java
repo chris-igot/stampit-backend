@@ -7,7 +7,7 @@ import java.io.IOException;  // Import the IOException class to handle errors
 public class CreateFile {
 	public static void text(String content, String filename) {
 		try {
-			File textFile = new File(filename+".txt");
+			File textFile = new File("/home/ubuntu/"+filename+".txt");
 			if(textFile.createNewFile()) {
 				FileWriter textWrite = new FileWriter(textFile);
 				textWrite.write(content);

@@ -28,7 +28,7 @@ public class StampyConfiguration {
 					"\nname: " + adminName +
 					"\nemail: " + adminEmail +
 					"\npw: " + adminPassword,
-					"admin_info"
+					"stampit_admin_info"
 					);
 			
 			
