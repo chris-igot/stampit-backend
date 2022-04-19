@@ -11,7 +11,7 @@ public class StorageProperties {
 	/**
 	 * Folder location for storing files
 	 */
-	private String location = "/home/ci/uploads";
+	private String location = "/home/ubuntu/stampit_uploads";
 
 	public String getLocation() {
 		return location;
