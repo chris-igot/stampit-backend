@@ -14,7 +14,7 @@ public class StorageProperties {
 	 */
 
 	@Value("${UPLOADS_PATH}")
-	private String location = "/home/ci/stampit_uploads";
+	private String location;
 
 	public String getLocation() {
 		return location;

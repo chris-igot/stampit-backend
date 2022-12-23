@@ -5,9 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;  // Import the IOException class to handle errors
 
 public class CreateFile {
-	public static void text(String content, String filename) {
+	public static void text(String content, String path, String filename) {
 		try {
-			File textFile = new File("/home/ubuntu/"+filename+".txt");
+			System.out.println(path+"/"+filename+".txt");
+			File textFile = new File(path+"/"+filename+".txt");
 			if(textFile.createNewFile()) {
 				FileWriter textWrite = new FileWriter(textFile);
 				textWrite.write(content);
